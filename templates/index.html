@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SENA - Sistema Electoral | Bienvenido</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/stilo.css' %}">
+</head>
+<body class="bg-gray-50 font-sans">
+    
+    <nav class="bg-white shadow-sm fixed w-full z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <img class="h-8 w-auto" src="{% static 'img/cgti.png' %}" alt="SENA Logo">
+                        <span class="ml-2 text-xl font-bold text-gray-800">SENA Electoral</span>
+                    </div>
+                </div>
+                <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
+                    <a href="#inicio" class="nav-link text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">Inicio</a>
+                    <a href="#acerca" class="nav-link text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">Acerca de</a>
+                    <a href="#como-funciona" class="nav-link text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">Cómo funciona</a>
+                    <a href="{% url 'candidatos' %}" class="nav-link text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">Candidatos</a>
+                    <a href="#faq" class="nav-link text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">FAQ</a>
+                </div>
+                <div class="flex items-center">
+                    <a href="{% url 'login' %}" class="hidden md:block sena-button text-white hover:bg-green-800 px-4 py-2 rounded-md text-sm font-medium">Ingresar</a>
+                    <button class="md:hidden bg-white p-2 rounded-md text-gray-500 hover:text-gray-600 focus:outline-none" id="mobile-menu-button">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="hidden md:hidden bg-white shadow-md absolute w-full" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="#inicio" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Inicio</a>
+                <a href="#acerca" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Acerca de</a>
+                <a href="#como-funciona" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Cómo funciona</a>
+                <a href="#candidatos" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Candidatos</a>
+                <a href="#faq" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">FAQ</a>
+                <a href="{% url 'login' %}" class="block px-3 py-2 rounded-md text-base font-medium sena-button text-white mt-3">Ingresar</a>
+            </div>
+        </div>
+    </nav>
+
+    
+    <section id="inicio" class="pt-24 pb-16 md:pt-32 md:pb-24 hero-pattern">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight animate__animated animate__fadeInUp">
+                        Sistema Electoral <span class="sena-text-green">SENA</span>
+                    </h1>
+                    <p class="mt-4 text-xl text-gray-600 animate__animated animate__fadeInUp animate__delay-1s">
+                        Una plataforma digital segura y transparente para las elecciones de representantes institucionales.
+                    </p>
+                    <div class="mt-8 flex flex-col sm:flex-row sm:space-x-4 animate__animated animate__fadeInUp animate__delay-2s">
+                        <a href="{% url 'login' %}" class="sena-button text-white px-6 py-3 rounded-md text-base font-medium shadow-lg hover:shadow-xl mb-4 sm:mb-0 text-center">
+                            Comenzar a votar
+                        </a>
+                        <a href="#como-funciona" class="bg-white text-gray-800 border border-gray-300 px-6 py-3 rounded-md text-base font-medium hover:bg-gray-50 text-center">
+                            ¿Cómo funciona?
+                        </a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 md:pl-10 flex justify-center">
+                    <img src="{% static 'img/cgti.png' %}" alt="Electoral System" class="max-w-full h-auto rounded-lg shadow-lg animate-float" />
+                </div>
+            </div>
+            <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 mt-12 hidden md:block">
+                <a href="#acerca" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-chevron-down text-2xl scroll-down"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    
+    <section class="py-12 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="bg-gray-50 rounded-lg p-6 text-center transform transition hover:scale-105 duration-300">
+                    <div class="text-3xl font-bold text-gray-900 mb-1">+15K</div>
+                    <div class="text-sm text-gray-600">Estudiantes Votantes</div>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-6 text-center transform transition hover:scale-105 duration-300">
+                    <div class="text-3xl font-bold text-gray-900 mb-1">96%</div>
+                    <div class="text-sm text-gray-600">Participación Digital</div>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-6 text-center transform transition hover:scale-105 duration-300">
+                    <div class="text-3xl font-bold text-gray-900 mb-1">3 min</div>
+                    <div class="text-sm text-gray-600">Tiempo Promedio Votación</div>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-6 text-center transform transition hover:scale-105 duration-300">
+                    <div class="text-3xl font-bold text-gray-900 mb-1">100%</div>
+                    <div class="text-sm text-gray-600">Seguro y Transparente</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <section id="acerca" class="py-16 md:py-24 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Acerca del Sistema Electoral</h2>
+                <div class="mt-4 max-w-3xl mx-auto">
+                    <p class="text-lg text-gray-600">
+                        Una herramienta moderna diseñada para facilitar los procesos democráticos dentro de la comunidad SENA.
+                    </p>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-xl p-6 shadow-sm feature-card">
+                    <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-4">
+                        <i class="fas fa-shield-alt text-xl sena-text-green"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Seguridad Avanzada</h3>
+                    <p class="text-gray-600">
+                        Implementamos protocolos de seguridad avanzados para garantizar la integridad de cada voto emitido.
+                    </p>
+                </div>
+                <div class="bg-white rounded-xl p-6 shadow-sm feature-card">
+                    <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-4">
+                        <i class="fas fa-mobile-alt text-xl sena-text-green"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Accesibilidad Total</h3>
+                    <p class="text-gray-600">
+                        Accede desde cualquier dispositivo y participa en el proceso electoral sin limitaciones técnicas.
+                    </p>
+                </div>
+                <div class="bg-white rounded-xl p-6 shadow-sm feature-card">
+                    <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-4">
+                        <i class="fas fa-chart-pie text-xl sena-text-green"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Resultados en Tiempo Real</h3>
+                    <p class="text-gray-600">
+                        Visualiza los resultados al instante y mantente informado sobre el avance del proceso electoral.
+                    </p>
+                </div>
+                <div class="bg-white rounded-xl p-6 shadow-sm feature-card">
+                    <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-4">
+                        <i class="fas fa-file-alt text-xl sena-text-green"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Perfiles Detallados</h3>
+                    <p class="text-gray-600">
+                        Conoce a cada candidato, sus propuestas y trayectoria para tomar decisiones informadas.
+                    </p>
+                </div>
+                <div class="bg-white rounded-xl p-6 shadow-sm feature-card">
+                    <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-4">
+                        <i class="fas fa-check-double text-xl sena-text-green"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Verificación en Múltiples Pasos</h3>
+                    <p class="text-gray-600">
+                        Sistema de autenticación multinivel que asegura la validez de cada participante en el proceso.
+                    </p>
+                </div>
+                <div class="bg-white rounded-xl p-6 shadow-sm feature-card">
+                    <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-4">
+                        <i class="fas fa-history text-xl sena-text-green"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Historial Completo</h3>
+                    <p class="text-gray-600">
+                        Accede al registro histórico de elecciones anteriores para análisis comparativos.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   
+    <section class="py-16 relative bg-cover bg-center" style="background-image: url('/api/placeholder/1920/600');">
+        <div class="absolute inset-0 bg-black opacity-50"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-white">Próximas Elecciones</h2>
+                <p class="mt-4 text-lg text-gray-200">
+                    El futuro de nuestra institución está en tus manos. Prepárate para participar.
+                </p>
+            </div>
+            <div class="flex flex-wrap justify-center gap-4">
+                <div class="countdown-item w-24 h-24 md:w-32 md:h-32 rounded-lg flex flex-col items-center justify-center">
+                    <div class="text-3xl md:text-4xl font-bold text-gray-900" id="countdown-days">03</div>
+                    <div class="text-sm text-gray-600">Días</div>
+                </div>
+                <div class="countdown-item w-24 h-24 md:w-32 md:h-32 rounded-lg flex flex-col items-center justify-center">
+                    <div class="text-3xl md:text-4xl font-bold text-gray-900" id="countdown-hours">15</div>
+                    <div class="text-sm text-gray-600">Horas</div>
+                </div>
+                <div class="countdown-item w-24 h-24 md:w-32 md:h-32 rounded-lg flex flex-col items-center justify-center">
+                    <div class="text-3xl md:text-4xl font-bold text-gray-900" id="countdown-minutes">42</div>
+                    <div class="text-sm text-gray-600">Minutos</div>
+                </div>
+                <div class="countdown-item w-24 h-24 md:w-32 md:h-32 rounded-lg flex flex-col items-center justify-center">
+                    <div class="text-3xl md:text-4xl font-bold text-gray-900" id="countdown-seconds">18</div>
+                    <div class="text-sm text-gray-600">Segundos</div>
+                </div>
+            </div>
+            <div class="mt-12 text-center">
+                <a href="#" class="sena-button text-white px-8 py-3 rounded-md text-lg font-medium shadow-lg hover:shadow-xl inline-flex items-center">
+                    <i class="fas fa-calendar-check mr-2"></i>
+                    Registrarse para votar
+                </a>
+            </div>
+        </div>
+    </section>
+
+    
+    <section id="como-funciona" class="py-16 md:py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900">¿Cómo Funciona?</h2>
+                <div class="mt-4 max-w-3xl mx-auto">
+                    <p class="text-lg text-gray-600">
+                        Un proceso simple y seguro para ejercer tu derecho al voto en pocos pasos.
+                    </p>
+                </div>
+            </div>
+            <div class="relative max-w-3xl mx-auto">
+                <div class="pl-10 space-y-8">
+                    <div class="timeline-item pb-8">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <div class="timeline-dot w-8 h-8 rounded-full bg-green-500 flex items-center justify-center">
+                                    <span class="text-white font-medium">1</span>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-xl font-semibold text-gray-900">Registro con Credenciales Institucionales</h3>
+                                <p class="mt-2 text-gray-600">
+                                    Accede al sistema utilizando tus credenciales del SENA. El sistema verifica automáticamente tu elegibilidad para participar en el proceso electoral.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-item pb-8">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <div class="timeline-dot w-8 h-8 rounded-full bg-green-500 flex items-center justify-center">
+                                    <span class="text-white font-medium">2</span>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-xl font-semibold text-gray-900">Explora los Candidatos</h3>
+                                <p class="mt-2 text-gray-600">
+                                    Conoce las propuestas, perfiles y trayectoria de cada candidato. Disponemos de información detallada para ayudarte a tomar una decisión informada.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-item pb-8">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <div class="timeline-dot w-8 h-8 rounded-full bg-green-500 flex items-center justify-center">
+                                    <span class="text-white font-medium">3</span>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-xl font-semibold text-gray-900">Emite tu Voto

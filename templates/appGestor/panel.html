@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SENA - Sistema Electoral | Panel de Administrador</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <style>
+        .sena-green {
+            background-color: #39A900;
+        }
+        .sena-text-green {
+            color: #39A900;
+        }
+        .sena-button {
+            background-color: #39A900;
+            transition: all 0.3s ease;
+        }
+        .sena-button:hover {
+            background-color: #2E8A00;
+        }
+        .sidebar-item {
+            transition: all 0.2s ease;
+        }
+        .sidebar-item:hover {
+            background-color: #f3f4f6;
+        }
+        .sidebar-item.active {
+            background-color: #ecfdf5;
+            border-left: 4px solid #39A900;
+        }
+        .sidebar-item.active .sidebar-icon {
+            color: #39A900;
+        }
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            min-width: 200px;
+            z-index: 50;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col md:flex-row">
+    <!-- Sidebar -->
+    <div class="bg-white w-full md:w-64 shadow-md flex-shrink-0 md:block" id="sidebar">
+        <div class="p-6 flex items-center justify-between">
+            <div class="flex items-center">
+                <img class="h-8 w-auto" src="/api/placeholder/80/32" alt="SENA Logo">
+                <span class="ml-3 text-lg font-semibold text-gray-900">Admin Panel</span>
+            </div>
+            <button id="sidebarToggle" class="md:hidden focus:outline-none">
+                <i class="fas fa-bars text-gray-500"></i>
+            </button>
+        </div>
+        <div class="md:block" id="sidebarMenu">
+            <nav class="mt-2">
+                <div class="px-4 py-2">
+                    <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                        General
+                    </div>
+                    <a href="#" class="mt-3 flex items-center px-4 py-3 sidebar-item active">
+                        <i class="fas fa-home sidebar-icon mr-3 text-gray-600"></i>
+                        <span class="text-gray-800 font-medium">Dashboard</span>
+                    </a>
+                    <a href="#" class="mt-1 flex items-center px-4 py-3 sidebar-item">
+                        <i class="fas fa-chart-bar sidebar-icon mr-3 text-gray-600"></i>
+                        <span class="text-gray-800 font-medium">Estadísticas</span>
+                    </a>
+                    <a href="#" class="mt-1 flex items-center px-4 py-3 sidebar-item">
+                        <i class="fas fa-users sidebar-icon mr-3 text-gray-600"></i>
+                        <span class="text-gray-800 font-medium">Candidatos</span>
+                    </a>
+                    <a href="#" class="mt-1 flex items-center px-4 py-3 sidebar-item">
+                        <i class="fas fa-vote-yea sidebar-icon mr-3 text-gray-600"></i>
+                        <span class="text-gray-800 font-medium">Votantes</span>
+                    </a>
+                    
+                    <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mt-8">
+                        Administración
+                    </div>
+                    <a href="#" class="mt-3 flex items-center px-4 py-3 sidebar-item">
+                        <i class="fas fa-cog sidebar-icon mr-3 text-gray-600"></i>
+                        <span class="text-gray-800 font-medium">Configuración</span>
+                    </a>
+                    <a href="#" class="mt-1 flex items-center px-4 py-3 sidebar-item">
+                        <i class="fas fa-user-shield sidebar-icon mr-3 text-gray-600"></i>
+                        <span class="text-gray-800 font-medium">Usuarios Admin</span>
+                    </a>
+                    <a href="#" class="mt-1 flex items-center px-4 py-3 sidebar-item">
+                        <i class="fas fa-calendar-alt sidebar-icon mr-3 text-gray-600"></i>
+                        <span class="text-gray-800 font-medium">Periodos Electorales</span>
+                    </a>
+                    <a href="#" class="mt-1 flex items-center px-4 py-3 sidebar-item">
+                        <i class="fas fa-clipboard-list sidebar-icon mr-3 text-gray-600"></i>
+                        <span class="text-gray-800 font-medium">Registros de Acceso</span>
+                    </a>
+                </div>
+            </nav>
+            <div class="px-6 py-4 mt-8 border-t border-gray-200">
+                <div class="flex items-center">
+                    <img class="h-10 w-10 rounded-full" src="/api/placeholder/100/100" alt="Admin">
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-gray-900">Administrador</p>
+                        <p class="text-xs text-gray-500">admin@sena.edu.co</p>
+                    </div>
+                </div>
+                <a href="#" class="mt-5 flex items-center text-sm text-red-600 hover:text-red-800">
+                    <i class="fas fa-sign-out-alt mr-2"></i>
+                    <span>Cerrar sesión</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 overflow-x-hidden overflow-y-auto">
+        <!-- Top Navigation -->
+        <header class="bg-white shadow">
+            <div class="flex items-center justify-between px-6 py-4">
+                <div class="flex-1">
+                    <h2 class="text-2xl font-bold text-gray-800">Panel de Administración</h2>
+                    <p class="text-sm text-gray-600">Sistema Electoral SENA</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="relative p-2 text-gray-600 hover:text-gray-900 focus:outline-none">
+                        <i class="fas fa-bell"></i>
+                        <span class="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></span>
+                    </button>
+                    <div class="relative dropdown">
+                        <button class="flex items-center space-x-2 focus:outline-none">
+                            <img class="h-8 w-8 rounded-full" src="/api/placeholder/80/80" alt="">
+                            <span class="hidden md:block text-sm font-medium text-gray-700">Admin</span>
+                            <i class="fas fa-chevron-down text-xs text-gray-500"></i>
+                        </button>
+                        <div class="dropdown-content bg-white shadow-md rounded-md overflow-hidden mt-2">
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <i class="fas fa-user mr-2"></i> Mi Perfil
+                            </a>
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <i class="fas fa-cog mr-2"></i> Configuración
+                            </a>
+                            <div class="border-t border-gray-100"></div>
+                            <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                                <i class="fas fa-sign-out-alt mr-2"></i> Cerrar sesión
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="p-6">
+            <!-- Stats Overview -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                <!-- Total Candidates -->
+                <div class="bg-white rounded-lg shadow-sm p-6 card">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-green-100 mr-4">
+                            <i class="fas fa-user-tie text-green-500 text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Total Candidatos</p>
+                            <p class="text-2xl font-bold text-gray-900">12</p>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <div class="flex items-center">
+                            <span class="text-green-500 text-sm font-medium flex items-center">
+                                <i class="fas fa-arrow-up mr-1"></i> 25%
+                            </span>
+                            <span class="text-gray-500 text-sm ml-2">respecto a la elección anterior</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Registered Voters -->
+                <div class="bg-white rounded-lg shadow-sm p-6 card">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-blue-100 mr-4">
+                            <i class="fas fa-users text-blue-500 text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Votantes Registrados</p>
+                            <p class="text-2xl font-bold text-gray-900">8,452</p>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <div class="flex items-center">
+                            <span class="text-green-500 text-sm font-medium flex items-center">
+                                <i class="fas fa-arrow-up mr-1"></i> 12%
+                            </span>
+                            <span class="text-gray-500 text-sm ml-2">más que el periodo anterior</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Votes -->
+                <div class="bg-white rounded-lg shadow-sm p-6 card">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-purple-100 mr-4">
+                            <i class="fas fa-vote-yea text-purple-500 text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Votos Realizados</p>
+                            <p class="text-2xl font-bold text-gray-900">3,267</p>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <div class="flex items-center">
+                            <span class="text-green-500 text-sm font-medium flex items-center">
+                                <i class="fas fa-arrow-up mr-1"></i> 38.6%
+                            </span>
+                            <span class="text-gray-500 text-sm ml-2">de participación</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Time Remaining -->
+                <div class="bg-white rounded-lg shadow-sm p-6 card">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-yellow-100 mr-4">
+                            <i class="fas fa-clock text-yellow-500 text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Tiempo Restante</p>
+                            <p class="text-2xl font-bold text-gray-900">3 días</p>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <div class="flex items-center">
+                            <span class="text-red-500 text-sm font-medium flex items-center">
+                                <i class="fas fa-calendar-day mr-1"></i> Finaliza:
+                            </span>
+                            <span class="text-gray-500 text-sm ml-2">7 Mayo, 2025</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts & Tables Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <!-- Voting Progress -->
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">Progreso de Votación</h3>
+                        <div class="dropdown relative">
+                            <button class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                            <div class="dropdown-content bg-white shadow-md rounded-md overflow-hidden">
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    Exportar Datos
+                                </a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    Ver Detalles
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <canvas id="votingProgressChart" height="300"></canvas>
+                </div>
+
+                <!-- Candidates Ranking -->
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">Ranking de Candidatos</h3>
+                        <div class="dropdown relative">
+                            <button class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                            <div class="dropdown-content bg-white shadow-md rounded-md overflow-hidden">
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    Exportar Datos
+                                </a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    Ver Detalles
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <canvas id="candidatesChart" height="300"></canvas>
+                </div>
+            </div>
+
+            <!-- Recent Activities & Candidates -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Recent Activities -->
+                <div class="lg:col-span-2 bg-white rounded-lg shadow-sm p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">Actividades Recientes</h3>
+                        <a href="#" class="text-sm font-medium text-green-600 hover:text-green-800">Ver todas</a>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Usuario</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acción</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
+                                                <i class="fas fa-user text-gray-500"></i>
+                                            </div>
+                                            <div class="ml-3">
+                                                <p class="text-sm font-medium text-gray-900">Juan Pérez</p>
+                                                <p class="text-xs text-gray-500">Estudiante</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <p class="text-sm text-gray-900">Voto registrado</p>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <p class="text-sm text-gray-500">Hoy, 10:23 AM</p>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                            Completado
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
+                                                <i class="fas fa-user text-gray-500"></i>
+                                            </div>
+                                            <div class="ml-3">
+                                                <p class="text-sm font-medium text-gray-900">María González</p>
+                                                <p class="text-xs text-gray-500">Docente</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <p class="text-sm text-gray-900">Voto registrado</p>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <p class="text-sm text-gray-500">Hoy, 9:45 AM</p>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                            Completado
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
+                                                <i class="fas fa-user text-gray-500"></i>
+                                            </div>
+                                            <div class="ml-3">
+                                                <p class="text-sm font-medium text-gray-900">Carlos Rodríguez</p>
+                                                <p class="text-xs text-gray-500">Administrativo</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <p class="text-sm text-gray-900">Intento fallido</p>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <p class="text-sm text-gray-500">Hoy, 9:30 AM</p>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
+                                            Error
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
+                                                <i class="fas fa-user text-gray-500"></i>
+                                            </div>
+                                            <div class="ml-3">
+                                                <p class="text-sm font-medium text-gray-900">Ana Martínez</p>
+                                                <p class="text-xs text-gray-500">Estudiante</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <p class="text-sm text-gray-900">Registro actualizado</p>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <p class="text-sm text-gray-500">Ayer, 3:15 PM</p>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                                            Actualizado
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Top Candidates -->
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">Candidatos Destacados</h3>
+                        <a href="#" class="text-sm font-medium text-green-600 hover:text-green-800">Ver todos</a>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                            <img class="h-12 w-12 rounded-full" src="/api/placeholder/120/120" alt="Candidato">
+                            <div class="ml-3">
+                                <p class="text-sm font-medium text-gray-900">Laura Valencia</p>
+                                <p class="text-xs text-gray-500">Representante Estudiantil</p>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-24 h-1.5 bg-gray-200 rounded overflow-hidden">
+                                        <div class="bg-green-500 h-1.5 rounded" style="width: 75%"></div>
+                                    </div>
+                                    <p class="text-xs font-medium text-gray-500 ml-2">75%</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                            <img class="h-12 w-12 rounded-full" src="/api/placeholder/120/120" alt="Candidato">
+                            <div class="ml-3">
+                                <p class="text-sm font-medium text-gray-900">Miguel Sánchez</p>
+                                <p class="text-xs text-gray-500">Representante Estudiantil</p>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-24 h-1.5 bg-gray-200 rounded overflow-hidden">
+                                        <div class="bg-green-500 h-1.5 rounded" style="width: 60%"></div>
+                                    </div>
+                                    <p class="text-xs font-medium text-gray-500 ml-2">60%</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                            <img class="h-12 w-12 rounded-full" src="/api/placeholder/120/120" alt="Candidato">
+                            <div class="ml-3">
+                                <p class="text-sm font-medium text-gray-900">Patricia Gómez</p>
+                                <p class="text-xs text-gray-500">Representante Docente</p>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-24 h-1.5 bg-gray-200 rounded overflow-hidden">
+                                        <div class="bg-green-500 h-1.5 rounded" style="width: 45%"></div>
+                                    </div>
+                                    <p class="text-xs font-medium text-gray-500 ml-2">45%</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                            <img class="h-12 w-12 rounded-full" src="/api/placeholder/120/120" alt="Candidato">
+                            <div class="ml-3">
+                                <p class="text-sm font-medium text-gray-900">Roberto Jiménez</p>
+                                <p class="text-xs text-gray-500">Representante Administrativo</p>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-24 h-1.5 bg-gray-200 rounded overflow-hidden">
+                                        <div class="bg-green-500 h-1.5 rounded" style="width: 30%"></div>
+                                    </div>
+                                    <p class="text-xs font-medium text-gray-500 ml-2">30%</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="mt-6 bg-white rounded-lg shadow-sm p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Acciones Rápidas</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <button class="flex flex-col items-center justify-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-2">
+                            <i class="fas fa-user-plus text-green-600"></i>
+                        </div>
+                        <p class="text-sm font-medium text-gray-700">Añadir Candidato</p>
+                    </button>
+                    <button class="flex flex-col items-center justify-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-2">
+                            <i class="fas fa-download text-blue-600"></i>
+                        </div>
+                        <p class="text-sm font-medium text-gray-700">Exportar Resultados</p>
+                    </button>
+                    <button class="flex flex-col items-center justify-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                        <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-2">
+                            <i class="fas fa-envelope text-purple-600"></i>
+                        </div>
+                        <p class="text-sm font-medium text-gray-700">Enviar Notificación</p>
+                    </button>
+                    <button class="flex flex-col items-center justify-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                        <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mb-2">
+                            <i class="fas fa-chart-pie text-yellow-600"></i>
+                        </div>
+                        <p class="text-sm font-medium text-gray-700">Generar Reportes</p>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Footer -->
+            <footer class="mt-8 text-center pb-6">
+                <p class="text-sm text-gray-500">© 2025 SENA - Sistema Electoral. Todos los derechos reservados.</p>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Toggle sidebar on mobile
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            const sidebarMenu = document.getElementById('sidebarMenu');
+            sidebarMenu.classList.toggle('hidden');
+        });
+
+        // Voting Progress Chart
+        const votingProgressCtx = document.getElementById('votingProgressChart').getContext('2d');
+        const votingProgressChart = new Chart(votingProgressCtx, {
+            type: 'line',
+            data: {
+                labels: ['1 Mayo', '2 Mayo', '3 Mayo', '4 Mayo', '5 Mayo', '6 Mayo', '7 Mayo'],
+                datasets: [{
+                    label: 'Votos por día',
+                    data: [521, 682, 845, 1219, 0, 0, 0],
+                    backgroundColor: 'rgba(57, 169, 0, 0.1)',
+                    borderColor: '#39A900',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    pointBackgroundColor: '#39A900',
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: '#333',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        displayColors: false,
+                        callbacks: {
+                            label: function(context) {
+                                return context.raw + ' votos';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            drawBorder: false,
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        },
+                        ticks: {
+                            font: {
+                                size: 11
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            font: {
+                                size: 11
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Candidates Chart
+        const candidatesCtx = document.getElementById('candidatesChart').getContext('2d');
+        const candidatesChart = new Chart(candidatesCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Laura V.', 'Miguel S.', 'Patricia G.', 'Roberto J.', 'Ana L.'],
+                datasets: [{
+                    label: 'Votos recibidos',
+                    data: [1250, 980, 740, 520, 480],
+                    backgroundColor: [
+                        'rgba(57, 169, 0, 0.8)',
+                        'rgba(59, 130, 246, 0.8)',
+                        'rgba(167, 139, 250, 0.8)',
+                        'rgba(248, 113, 113, 0.8)',
+                        'rgba(251, 191, 36, 0.8)'
+                    ],
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: '#333',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        displayColors: false,
+                        callbacks: {
+                            label: function(context) {
+                                return context.raw + ' votos';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            drawBorder: false,
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Simulate notifications and alerts
+        function showNotification() {
+            const notificationContainer = document.createElement('div');
+            notificationContainer.className = 'fixed bottom-4 right-4 bg-white rounded-lg shadow-lg p-4 flex items-center max-w-xs animate-bounce';
+            notificationContainer.innerHTML = `
+                <div class="flex-shrink-0 mr-3">
+                    <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
+                        <i class="fas fa-check text-green-500"></i>
+                    </div>
+                </div>
+                <div>
+                    <p class="text-sm font-medium text-gray-900">Nuevo voto registrado</p>
+                    <p class="text-xs text-gray-500">Hace un momento</p>
+                </div>
+                <button class="ml-auto text-gray-400 hover:text-gray-600" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            document.body.appendChild(notificationContainer);
+            
+            setTimeout(() => {
+                notificationContainer.classList.remove('animate-bounce');
+            }, 1000);
+            
+            setTimeout(() => {
+                notificationContainer.remove();
+            }, 5000);
+        }
+        
+        // Show a notification after 3 seconds
+        setTimeout(showNotification, 3000);
+    </script>
+</body>
+</html>
