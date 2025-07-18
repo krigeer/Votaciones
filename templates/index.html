@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     {% load static %}
     <meta charset="UTF-8">
@@ -9,9 +10,11 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/stilo.css' %}">
+    <link rel="shortcut icon" href="{% static 'img/cgti.png' %}" type="image/x-icon">
+
 </head>
+
 <body class="bg-gray-50 font-sans">
-    
     <nav class="bg-white shadow-sm fixed w-full z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
@@ -22,55 +25,76 @@
                     </div>
                 </div>
                 <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
-                    <a href="#inicio" class="nav-link text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">Inicio</a>
-                    <a href="#acerca" class="nav-link text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">Acerca de</a>
-                    <a href="#como-funciona" class="nav-link text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">Cómo funciona</a>
-                    <a href="{% url 'candidatos' %}" class="nav-link text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">Candidatos</a>
-                    <a href="#faq" class="nav-link text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">FAQ</a>
+                    <a href="#inicio"
+                        class="nav-link text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">Inicio</a>
+                    <a href="#acerca"
+                        class="nav-link text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">Acerca de</a>
+                    <a href="#como-funciona"
+                        class="nav-link text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">Cómo
+                        funciona</a>
+                    <a href="{% url 'candidatos' %}"
+                        class="nav-link text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">Candidatos</a>
                 </div>
                 <div class="flex items-center">
-                    <a href="{% url 'login' %}" class="hidden md:block sena-button text-white hover:bg-green-800 px-4 py-2 rounded-md text-sm font-medium">Ingresar</a>
-                    <button class="md:hidden bg-white p-2 rounded-md text-gray-500 hover:text-gray-600 focus:outline-none" id="mobile-menu-button">
+                    <a href="{% url 'login' %}"
+                        class="hidden md:block sena-button text-white hover:bg-green-800 px-4 py-2 rounded-md text-sm font-medium">Ingresar</a>
+                    <button
+                        class="md:hidden bg-white p-2 rounded-md text-gray-500 hover:text-gray-600 focus:outline-none"
+                        id="mobile-menu-button">
                         <i class="fas fa-bars"></i>
                     </button>
                 </div>
             </div>
         </div>
-        
+
         <div class="hidden md:hidden bg-white shadow-md absolute w-full" id="mobile-menu">
             <div class="px-2 pt-2 pb-3 space-y-1">
-                <a href="#inicio" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Inicio</a>
-                <a href="#acerca" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Acerca de</a>
-                <a href="#como-funciona" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Cómo funciona</a>
-                <a href="#candidatos" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Candidatos</a>
-                <a href="#faq" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">FAQ</a>
-                <a href="{% url 'login' %}" class="block px-3 py-2 rounded-md text-base font-medium sena-button text-white mt-3">Ingresar</a>
+                <a href="#inicio"
+                    class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Inicio</a>
+                <a href="#acerca"
+                    class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Acerca
+                    de</a>
+                <a href="#como-funciona"
+                    class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Cómo
+                    funciona</a>
+                <a href="#candidatos"
+                    class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Candidatos</a>
+                <a href="#faq"
+                    class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">FAQ</a>
+                <a href="{% url 'login' %}"
+                    class="block px-3 py-2 rounded-md text-base font-medium sena-button text-white mt-3">Ingresar</a>
             </div>
         </div>
     </nav>
 
-    
+
     <section id="inicio" class="pt-24 pb-16 md:pt-32 md:pb-24 hero-pattern">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row items-center justify-between">
                 <div class="md:w-1/2 mb-10 md:mb-0">
-                    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight animate__animated animate__fadeInUp">
+                    <h1
+                        class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight animate__animated animate__fadeInUp">
                         Sistema Electoral <span class="sena-text-green">SENA</span>
                     </h1>
                     <p class="mt-4 text-xl text-gray-600 animate__animated animate__fadeInUp animate__delay-1s">
-                        Una plataforma digital segura y transparente para las elecciones de representantes institucionales.
+                        Una plataforma digital segura y transparente para las elecciones de representantes
+                        institucionales.
                     </p>
-                    <div class="mt-8 flex flex-col sm:flex-row sm:space-x-4 animate__animated animate__fadeInUp animate__delay-2s">
-                        <a href="{% url 'login' %}" class="sena-button text-white px-6 py-3 rounded-md text-base font-medium shadow-lg hover:shadow-xl mb-4 sm:mb-0 text-center">
+                    <div
+                        class="mt-8 flex flex-col sm:flex-row sm:space-x-4 animate__animated animate__fadeInUp animate__delay-2s">
+                        <a href="{% url 'login' %}"
+                            class="sena-button text-white px-6 py-3 rounded-md text-base font-medium shadow-lg hover:shadow-xl mb-4 sm:mb-0 text-center">
                             Comenzar a votar
                         </a>
-                        <a href="#como-funciona" class="bg-white text-gray-800 border border-gray-300 px-6 py-3 rounded-md text-base font-medium hover:bg-gray-50 text-center">
+                        <a href="#como-funciona"
+                            class="bg-white text-gray-800 border border-gray-300 px-6 py-3 rounded-md text-base font-medium hover:bg-gray-50 text-center">
                             ¿Cómo funciona?
                         </a>
                     </div>
                 </div>
                 <div class="md:w-1/2 md:pl-10 flex justify-center">
-                    <img src="{% static 'img/cgti.png' %}" alt="Electoral System" class="max-w-full h-auto rounded-lg shadow-lg animate-float" />
+                    <img src="{% static 'img/cgti.png' %}" alt="Electoral System"
+                        class="max-w-full h-auto rounded-lg shadow-lg animate-float" />
                 </div>
             </div>
             <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 mt-12 hidden md:block">
@@ -81,7 +105,7 @@
         </div>
     </section>
 
-    
+
     <section class="py-12 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -105,14 +129,15 @@
         </div>
     </section>
 
-    
+
     <section id="acerca" class="py-16 md:py-24 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Acerca del Sistema Electoral</h2>
                 <div class="mt-4 max-w-3xl mx-auto">
                     <p class="text-lg text-gray-600">
-                        Una herramienta moderna diseñada para facilitar los procesos democráticos dentro de la comunidad SENA.
+                        Una herramienta moderna diseñada para facilitar los procesos democráticos dentro de la comunidad
+                        SENA.
                     </p>
                 </div>
             </div>
@@ -123,7 +148,8 @@
                     </div>
                     <h3 class="text-xl font-semibold text-gray-900 mb-2">Seguridad Avanzada</h3>
                     <p class="text-gray-600">
-                        Implementamos protocolos de seguridad avanzados para garantizar la integridad de cada voto emitido.
+                        Implementamos protocolos de seguridad avanzados para garantizar la integridad de cada voto
+                        emitido.
                     </p>
                 </div>
                 <div class="bg-white rounded-xl p-6 shadow-sm feature-card">
@@ -132,7 +158,8 @@
                     </div>
                     <h3 class="text-xl font-semibold text-gray-900 mb-2">Accesibilidad Total</h3>
                     <p class="text-gray-600">
-                        Accede desde cualquier dispositivo y participa en el proceso electoral sin limitaciones técnicas.
+                        Accede desde cualquier dispositivo y participa en el proceso electoral sin limitaciones
+                        técnicas.
                     </p>
                 </div>
                 <div class="bg-white rounded-xl p-6 shadow-sm feature-card">
@@ -175,7 +202,7 @@
         </div>
     </section>
 
-   
+
     <section class="py-16 relative bg-cover bg-center" style="background-image: url('/api/placeholder/1920/600');">
         <div class="absolute inset-0 bg-black opacity-50"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -186,25 +213,30 @@
                 </p>
             </div>
             <div class="flex flex-wrap justify-center gap-4">
-                <div class="countdown-item w-24 h-24 md:w-32 md:h-32 rounded-lg flex flex-col items-center justify-center">
+                <div
+                    class="countdown-item w-24 h-24 md:w-32 md:h-32 rounded-lg flex flex-col items-center justify-center">
                     <div class="text-3xl md:text-4xl font-bold text-gray-900" id="countdown-days">03</div>
                     <div class="text-sm text-gray-600">Días</div>
                 </div>
-                <div class="countdown-item w-24 h-24 md:w-32 md:h-32 rounded-lg flex flex-col items-center justify-center">
+                <div
+                    class="countdown-item w-24 h-24 md:w-32 md:h-32 rounded-lg flex flex-col items-center justify-center">
                     <div class="text-3xl md:text-4xl font-bold text-gray-900" id="countdown-hours">15</div>
                     <div class="text-sm text-gray-600">Horas</div>
                 </div>
-                <div class="countdown-item w-24 h-24 md:w-32 md:h-32 rounded-lg flex flex-col items-center justify-center">
+                <div
+                    class="countdown-item w-24 h-24 md:w-32 md:h-32 rounded-lg flex flex-col items-center justify-center">
                     <div class="text-3xl md:text-4xl font-bold text-gray-900" id="countdown-minutes">42</div>
                     <div class="text-sm text-gray-600">Minutos</div>
                 </div>
-                <div class="countdown-item w-24 h-24 md:w-32 md:h-32 rounded-lg flex flex-col items-center justify-center">
+                <div
+                    class="countdown-item w-24 h-24 md:w-32 md:h-32 rounded-lg flex flex-col items-center justify-center">
                     <div class="text-3xl md:text-4xl font-bold text-gray-900" id="countdown-seconds">18</div>
                     <div class="text-sm text-gray-600">Segundos</div>
                 </div>
             </div>
             <div class="mt-12 text-center">
-                <a href="#" class="sena-button text-white px-8 py-3 rounded-md text-lg font-medium shadow-lg hover:shadow-xl inline-flex items-center">
+                <a href="#"
+                    class="sena-button text-white px-8 py-3 rounded-md text-lg font-medium shadow-lg hover:shadow-xl inline-flex items-center">
                     <i class="fas fa-calendar-check mr-2"></i>
                     Registrarse para votar
                 </a>
@@ -212,7 +244,7 @@
         </div>
     </section>
 
-    
+
     <section id="como-funciona" class="py-16 md:py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
@@ -228,14 +260,17 @@
                     <div class="timeline-item pb-8">
                         <div class="flex">
                             <div class="flex-shrink-0">
-                                <div class="timeline-dot w-8 h-8 rounded-full bg-green-500 flex items-center justify-center">
+                                <div
+                                    class="timeline-dot w-8 h-8 rounded-full bg-green-500 flex items-center justify-center">
                                     <span class="text-white font-medium">1</span>
                                 </div>
                             </div>
                             <div class="ml-4">
-                                <h3 class="text-xl font-semibold text-gray-900">Registro con Credenciales Institucionales</h3>
+                                <h3 class="text-xl font-semibold text-gray-900">Registro con Credenciales
+                                    Institucionales</h3>
                                 <p class="mt-2 text-gray-600">
-                                    Accede al sistema utilizando tus credenciales del SENA. El sistema verifica automáticamente tu elegibilidad para participar en el proceso electoral.
+                                    Accede al sistema utilizando tus credenciales del SENA. El sistema verifica
+                                    automáticamente tu elegibilidad para participar en el proceso electoral.
                                 </p>
                             </div>
                         </div>
@@ -243,14 +278,16 @@
                     <div class="timeline-item pb-8">
                         <div class="flex">
                             <div class="flex-shrink-0">
-                                <div class="timeline-dot w-8 h-8 rounded-full bg-green-500 flex items-center justify-center">
+                                <div
+                                    class="timeline-dot w-8 h-8 rounded-full bg-green-500 flex items-center justify-center">
                                     <span class="text-white font-medium">2</span>
                                 </div>
                             </div>
                             <div class="ml-4">
                                 <h3 class="text-xl font-semibold text-gray-900">Explora los Candidatos</h3>
                                 <p class="mt-2 text-gray-600">
-                                    Conoce las propuestas, perfiles y trayectoria de cada candidato. Disponemos de información detallada para ayudarte a tomar una decisión informada.
+                                    Conoce las propuestas, perfiles y trayectoria de cada candidato. Disponemos de
+                                    información detallada para ayudarte a tomar una decisión informada.
                                 </p>
                             </div>
                         </div>
@@ -258,9 +295,63 @@
                     <div class="timeline-item pb-8">
                         <div class="flex">
                             <div class="flex-shrink-0">
-                                <div class="timeline-dot w-8 h-8 rounded-full bg-green-500 flex items-center justify-center">
+                                <div
+                                    class="timeline-dot w-8 h-8 rounded-full bg-green-500 flex items-center justify-center">
                                     <span class="text-white font-medium">3</span>
                                 </div>
                             </div>
                             <div class="ml-4">
-                                <h3 class="text-xl font-semibold text-gray-900">Emite tu Voto
+                                <h3 class="text-xl font-semibold text-gray-900">Emite tu Voto</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="footer-section">
+                    <h2 class="text-xl font-semibold mb-4">Sobre Nosotros</h2>
+                    <p class="text-gray-300 leading-relaxed">
+                        Somos una plataforma dedicada a la gestión de inventarios tecnológicos,
+                        optimizando procesos y mejorando la eficiencia.
+                    </p>
+                </div>
+
+                <div class="footer-section">
+                    <h2 class="text-xl font-semibold mb-4">Enlaces Rápidos</h2>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors duration-200">Inicio</a>
+                        </li>
+                        <li><a href="#"
+                                class="text-gray-300 hover:text-white transition-colors duration-200">Servicios</a></li>
+                        <li><a href="#"
+                                class="text-gray-300 hover:text-white transition-colors duration-200">Contacto</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors duration-200">Política
+                                de privacidad</a></li>
+                    </ul>
+                </div>
+
+               <div class="footer-section">
+                        <h2 class="text-xl font-semibold mb-4">Nuestros Aliados</h2>
+                        <div class="flex flex-wrap gap-4">
+                            <img src="{% static 'img/cgti.png' %}" alt="Aliado 1" class="h-10 w-auto object-contain  rounded px-2 py-1">
+                            <img src="{% static 'img/aliado1.png' %}" alt="Aliado 2" class="h-10 w-auto object-contain  rounded px-2 py-1">
+                            <img src="{% static 'img/aliado2.png' %}" alt="Aliado 3" class="h-10 w-auto object-contain  rounded px-2 py-1">
+                        </div>
+                    </div>
+            </div>
+        </div>
+        <div class="border-t border-gray-700 mt-8 pt-6 text-center">
+            <p class="text-gray-400 text-sm">
+                © 2025 Todos los derechos reservados.
+            </p>
+        </div>
+    </footer>
+</body>
+
+</html>

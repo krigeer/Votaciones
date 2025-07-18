@@ -1,11 +1,11 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index, name='index'),
+    path('', views.index, name='inicio'),
     path('login/', views.login, name='login'),
-    path('gestor/', views.gestor, name='gestor'),
+    path('', include('appGestor.urls')),
     path('candidatos/', views.candidatos, name='candidatos')
 ]

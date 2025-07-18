@@ -5,11 +5,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SENA - Sistema Electoral | Login</title>
+    <link rel="stylesheet" href="{% static 'css/stilo.css' %}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="shortcut icon" href="{% static 'img/cgti.png' %}" type="image/x-icon">
 </head>
 <body class="bg-gray-100 h-screen">
-    <div class="login-container flex h-screen">
-        <!-- Lado izquierdo -->
+    <nav class="bg-white shadow-sm fixed w-full z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <img class="h-8 w-auto" src="{% static 'img/cgti.png' %}" alt="SENA Logo">
+                        <span class="ml-2 text-xl font-bold text-gray-800">SENA Electoral</span>
+                    </div>
+                </div>
+                <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
+                    <a href="{% url 'inicio' %}"
+                        class="nav-link text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">Inicio</a>
+                    <a href="{% url 'candidatos' %}"
+                        class="nav-link text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">Candidatos</a>
+                </div>
+                <div class="flex items-center">
+                    <a href="{% url 'login' %}"
+                        class="hidden md:block sena-button text-white hover:bg-green-800 px-4 py-2 rounded-md text-sm font-medium">Ingresar</a>
+                    <button
+                        class="md:hidden bg-white p-2 rounded-md text-gray-500 hover:text-gray-600 focus:outline-none"
+                        id="mobile-menu-button">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="hidden md:hidden bg-white shadow-md absolute w-full" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="#inicio"
+                    class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Inicio</a>
+                <a href="#acerca"
+                    class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Acerca
+                    de</a>
+                <a href="#como-funciona"
+                    class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Cómo
+                    funciona</a>
+                <a href="#candidatos"
+                    class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Candidatos</a>
+                <a href="#faq"
+                    class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">FAQ</a>
+                <a href="{% url 'login' %}"
+                    class="block px-3 py-2 rounded-md text-base font-medium sena-button text-white mt-3">Ingresar</a>
+            </div>
+        </div>
+    </nav>
+    <div class="login-container flex h-screen mb-2">
         <div class="hidden lg:flex lg:w-1/2 bg-cover bg-center relative" style="background-image: url('/api/placeholder/960/1080');">
             <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center px-10">
                 <img src="{% static 'img/cgti.png' %}" alt="Logo SENA" class="mb-8">
@@ -17,8 +65,6 @@
                 <p class="text-white text-xl text-center">Elige a tus representantes y construye el futuro del SENA</p>
             </div>
         </div>
-        
-        <!-- Lado derecho -->
         <div class="w-full lg:w-1/2 flex justify-center items-center">
             <div class="bg-white p-10 rounded-lg shadow-xl w-full max-w-md">
                 <div class="flex justify-center mb-6 lg:hidden">
@@ -26,22 +72,17 @@
                 </div>
                 <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Iniciar Sesión</h2>
                 
-                <form class="space-y-6">
+                <form class="space-y-6" method="post">
+                    {% csrf_token %}
+                   {% for field in form %}
                     <div>
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="documento">
-                            Número de Documento
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="{{ field.id_for_label }}">
+                           {{ field.label }}
                         </label>
-                        <input class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-green-500" 
-                            id="documento" type="text" placeholder="Ingresa tu número de documento">
+                        {{ field }}
+                        
                     </div>
-                    
-                    <div>
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
-                            Contraseña
-                        </label>
-                        <input class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-green-500" 
-                            id="password" type="password" placeholder="Ingresa tu contraseña">
-                    </div>
+                    {% endfor %}
                     
                     <div class="flex items-center justify-between">
                         <div class="flex items-center">
@@ -72,5 +113,53 @@
             </div>
         </div>
     </div>
+    <footer class="bg-gray-800 text-white py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="footer-section">
+                        <h2 class="text-xl font-semibold mb-4">Sobre Nosotros</h2>
+                        <p class="text-gray-300 leading-relaxed">
+                            Somos una plataforma dedicada a la gestión de inventarios tecnológicos,
+                            optimizando procesos y mejorando la eficiencia.
+                        </p>
+                    </div>
+
+                    <div class="footer-section">
+                        <h2 class="text-xl font-semibold mb-4">Enlaces Rápidos</h2>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="text-gray-300 hover:text-white transition-colors duration-200">Inicio</a></li>
+                            <li><a href="#" class="text-gray-300 hover:text-white transition-colors duration-200">Servicios</a></li>
+                            <li><a href="#" class="text-gray-300 hover:text-white transition-colors duration-200">Contacto</a></li>
+                            <li><a href="#" class="text-gray-300 hover:text-white transition-colors duration-200">Política de privacidad</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-section">
+                        <h2 class="text-xl font-semibold mb-4">Nuestros Aliados</h2>
+                        <div class="flex flex-wrap gap-4">
+                            <img src="{% static 'img/cgti.png' %}" alt="Aliado 1" class="h-10 w-auto object-contain  rounded px-2 py-1">
+                            <img src="{% static 'img/aliado1.png' %}" alt="Aliado 2" class="h-10 w-auto object-contain  rounded px-2 py-1">
+                            <img src="{% static 'img/aliado2.png' %}" alt="Aliado 3" class="h-10 w-auto object-contain  rounded px-2 py-1">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-6 text-center">
+                <p class="text-gray-400 text-sm">
+                    © 2025 Todos los derechos reservados.
+                </p>
+            </div>
+        </footer>
+    {% if messages %}
+{% for message in messages %}
+<script>
+    Swal.fire({
+        title: "INFO",
+        text: "{{ message }}!",
+        icon: "info"
+    });
+</script>
+{% endfor %}
+{% endif %}
 </body>
 </html>

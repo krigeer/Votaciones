@@ -42,6 +42,7 @@ class Usuario(models.Model):
     numero_documento = models.BigIntegerField(null=False, unique=True)
     email_usuario = models.EmailField(unique=True, null=False)
     numero_celular = models.BigIntegerField()
+    rol = models.ForeignKey(Roles, on_delete=models.CASCADE, default=1)
     def __str__(self):
         return self.nombres_usuario
     
