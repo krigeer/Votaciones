@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carga Masiva de Usuarios - Excel</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <link rel="shortcut icon" href="{% static 'img/cgti.png' %}" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="{% static 'css/stilo.css' %}">
+    <script src="{% static 'js/index.js' %}"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#1E40AF',
+                        success: '#10B981',
+                        warning: '#F59E0B',
+                        error: '#EF4444'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col md:flex-row">
+    <!-- Sidebar -->
+    <div class="bg-white w-full md:w-64 shadow-md flex-shrink-0 md:block" id="sidebar">
+        <div class="p-6 flex items-center justify-between">
+            <div class="flex items-center">
+                <img class="h-8 w-auto" src="{% static 'img/cgti.png' %}" alt="SENA Logo">
+                <span class="ml-3 text-lg font-semibold text-gray-900">Admin Panel</span>
+            </div>
+            <button id="sidebarToggle" class="md:hidden focus:outline-none">
+                <i class="fas fa-bars text-gray-500"></i>
+            </button>
+        </div>
+        <div class="md:block" id="sidebarMenu">
+            <nav class="mt-2">
+                <div class="px-4 py-2">
+                    <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                        General
+                    </div>
+                    <a href="#" class="mt-3 flex items-center px-4 py-3 sidebar-item active">
+                        <i class="fas fa-home sidebar-icon mr-3 text-gray-600"></i>
+                        <span class="text-gray-800 font-medium">Dashboard</span>
+                    </a>
+                    <a href="#" class="mt-1 flex items-center px-4 py-3 sidebar-item">
+                        <i class="fas fa-chart-bar sidebar-icon mr-3 text-gray-600"></i>
+                        <span class="text-gray-800 font-medium">Estadísticas</span>
+                    </a>
+                    <a href="{% url 'candidatos' %}" class="mt-1 flex items-center px-4 py-3 sidebar-item">
+                        <i class="fas fa-users sidebar-icon mr-3 text-gray-600"></i>
+                        <span class="text-gray-800 font-medium">Candidatos</span>
+                    </a>
+                    <a href="#" class="mt-1 flex items-center px-4 py-3 sidebar-item">
+                        <i class="fas fa-vote-yea sidebar-icon mr-3 text-gray-600"></i>
+                        <span class="text-gray-800 font-medium">Votantes</span>
+                    </a>
+
+                    <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mt-8">
+                        Administración
+                    </div>
+                    <a href="#" class="mt-3 flex items-center px-4 py-3 sidebar-item">
+                        <i class="fas fa-cog sidebar-icon mr-3 text-gray-600"></i>
+                        <span class="text-gray-800 font-medium">Configuración</span>
+                    </a>
+                    <a href="#" class="mt-1 flex items-center px-4 py-3 sidebar-item">
+                        <i class="fas fa-user-shield sidebar-icon mr-3 text-gray-600"></i>
+                        <span class="text-gray-800 font-medium">Usuarios Admin</span>
+                    </a>
+                    <a href="#" class="mt-1 flex items-center px-4 py-3 sidebar-item">
+                        <i class="fas fa-calendar-alt sidebar-icon mr-3 text-gray-600"></i>
+                        <span class="text-gray-800 font-medium">Periodos Electorales</span>
+                    </a>
+                    <a href="#" class="mt-1 flex items-center px-4 py-3 sidebar-item">
+                        <i class="fas fa-clipboard-list sidebar-icon mr-3 text-gray-600"></i>
+                        <span class="text-gray-800 font-medium">Registros de Acceso</span>
+                    </a>
+                </div>
+            </nav>
+            <div class="px-6 py-4 mt-8 border-t border-gray-200">
+                <div class="flex items-center">
+                    <img class="h-10 w-10 rounded-full" src="{% static 'img/user.png' %}" alt="Admin">
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-gray-900">{{ nombre_usuario }}</p>
+                        <p class="text-xs text-gray-500">admin@sena.edu.co</p>
+                    </div>
+                </div>
+                <a href="#" class="mt-5 flex items-center text-sm text-red-600 hover:text-red-800">
+                    <i class="fas fa-sign-out-alt mr-2"></i>
+                    <span>Cerrar sesión</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 overflow-x-hidden overflow-y-auto">
+        <!-- Top Navigation -->
+        <header class="bg-white shadow">
+            <div class="flex items-center justify-between px-6 py-4">
+                <div class="flex-1">
+                    <h2 class="text-2xl font-bold text-gray-800">Panel de Administración</h2>
+                    <p class="text-sm text-gray-600">Sistema Electoral SENA</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="relative p-2 text-gray-600 hover:text-gray-900 focus:outline-none">
+                        <i class="fas fa-bell"></i>
+                        <span class="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></span>
+                    </button>
+                    <div class="relative dropdown">
+                        <button class="flex items-center space-x-2 focus:outline-none">
+                            <img class="h-8 w-8 rounded-full" src="{% static 'img/user.png' %}" alt="">
+                            <span class="hidden md:block text-sm font-medium text-gray-700">{{ nombre_usuario }}</span>
+                            <i class="fas fa-chevron-down text-xs text-gray-500"></i>
+                        </button>
+                        <div class="dropdown-content bg-white shadow-md rounded-md overflow-hidden mt-2">
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <i class="fas fa-user mr-2"></i> Mi Perfil
+                            </a>
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <i class="fas fa-cog mr-2"></i> Configuración
+                            </a>
+                            <div class="border-t border-gray-100"></div>
+                            <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                                <i class="fas fa-sign-out-alt mr-2"></i> Cerrar sesión
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="p-6">
+            <!-- Stats Overview -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                <!-- Total Candidates -->
+                <div class="bg-white rounded-lg shadow-sm p-6 card">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-green-100 mr-4">
+                            <i class="fas fa-user-tie text-green-500 text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Total Candidatos</p>
+                            <p class="text-2xl font-bold text-gray-900">{{candidatos}}</p>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <div class="flex items-center">
+                            <span class="text-green-500 text-sm font-medium flex items-center">
+                                <i class="fas fa-arrow-up mr-1"></i> 25%
+                            </span>
+                            <span class="text-gray-500 text-sm ml-2">respecto a la elección anterior</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Registered Voters -->
+                <div class="bg-white rounded-lg shadow-sm p-6 card">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-blue-100 mr-4">
+                            <i class="fas fa-users text-blue-500 text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Votantes Registrados</p>
+                            <p class="text-2xl font-bold text-gray-900">{{votantes}}</p>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <div class="flex items-center">
+                            <span class="text-green-500 text-sm font-medium flex items-center">
+                                <i class="fas fa-arrow-up mr-1"></i> 12%
+                            </span>
+                            <span class="text-gray-500 text-sm ml-2">más que el periodo anterior</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Votes -->
+                <div class="bg-white rounded-lg shadow-sm p-6 card">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-purple-100 mr-4">
+                            <i class="fas fa-vote-yea text-purple-500 text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Votos Realizados</p>
+                            <p class="text-2xl font-bold text-gray-900">{{votos}}</p>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <div class="flex items-center">
+                            <span class="text-green-500 text-sm font-medium flex items-center">
+                                <i class="fas fa-arrow-up mr-1"></i> 38.6%
+                            </span>
+                            <span class="text-gray-500 text-sm ml-2">de participación</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Time Remaining -->
+                <div class="bg-white rounded-lg shadow-sm p-6 card">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-yellow-100 mr-4">
+                            <i class="fas fa-clock text-yellow-500 text-xl"></i>
+                        </div>
+                        <div>
+
+                            <p class="text-sm font-medium text-gray-600">Tiempo Restante</p>
+                            <p class="text-2xl font-bold text-gray-900">{{tiempo_restante}}</p>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <div class="flex items-center">
+                            <span class="text-red-500 text-sm font-medium flex items-center">
+                                <i class="fas fa-calendar-day mr-1"></i> Finaliza:
+                            </span>
+                            <span class="text-gray-500 text-sm ml-2">{{ ultima_fecha.fecha_fin|date:"j \\d\\e F, Y"}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts & Tables Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <!-- Voting Progress -->
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
+                        <i class="fas fa-upload text-primary mr-3"></i>
+                        Cargar Archivo
+                    </h2>
+                    <form method="post" enctype="multipart/form-data" id="upload-form">
+                        {% csrf_token %}
+                        
+                        <div class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-primary transition-colors duration-300 cursor-pointer group" id="drop-zone">
+                            <div class="mb-4">
+                                <i class="fas fa-cloud-upload-alt text-6xl text-gray-400 group-hover:text-primary transition-colors duration-300"></i>
+                            </div>
+                            <p class="text-lg font-medium text-gray-700 mb-2">Arrastra tu archivo Excel aquí</p>
+                            <p class="text-gray-500 mb-4">o haz clic para seleccionar</p>
+                            <form method="post" enctype="multipart/form-data">
+
+                            <input type="file" 
+                                   name="archivo" 
+                                   id="file-input" 
+                                   accept=".xlsx,.xls"
+                                   required
+                                   class="hidden">
+                            
+                            <button type="button" onclick="document.getElementById('file-input').click()" 
+                                    class="bg-primary hover:bg-secondary text-white px-6 py-3 rounded-lg transition-colors duration-300 font-medium">
+                                <i class="fas fa-folder-open mr-2"></i>
+                                Seleccionar Archivo
+                            </button>
+                        </div>
+                        <div id="file-info" class="hidden mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <i class="fas fa-file-excel text-green-600 mr-3 text-xl"></i>
+                                    <div>
+                                        <p class="font-medium text-green-800" id="file-name"></p>
+                                        <p class="text-sm text-green-600" id="file-size"></p>
+                                    </div>
+                                </div>
+                                <button type="button" onclick="removeFile()" class="text-red-500 hover:text-red-700">
+                                    <i class="fas fa-times text-xl"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <input type="hidden" name="action" value="upload_users">
+
+                        <div class="mt-8">
+                            <button type="submit" 
+                                    id="upload-btn" 
+                                    disabled 
+                                    class="w-full bg-gray-400 text-white py-4 rounded-lg font-semibold text-lg transition-all duration-300 disabled:cursor-not-allowed">
+                                <i class="fas fa-upload mr-2"></i>
+                                Subir y Procesar Archivo
+                            </button>
+                        </div>
+                        {% if form.errors %}
+                        <div class="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                            <h4 class="font-semibold text-red-800 mb-2 flex items-center">
+                                <i class="fas fa-exclamation-circle mr-2"></i>
+                                Errores en el formulario
+                            </h4>
+                            <ul class="text-sm text-red-700 space-y-1">
+                                {% for field, errors in form.errors.items %}
+                                    {% for error in errors %}
+                                        <li>• {{ error }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                        {% if messages %}
+                        <div class="mt-6 space-y-3">
+                            {% for message in messages %}
+                            <div class="p-4 rounded-lg border
+                                {% if message.tags == 'success' %}bg-green-50 border-green-200 text-green-800
+                                {% elif message.tags == 'error' %}bg-red-50 border-red-200 text-red-800
+                                {% elif message.tags == 'warning' %}bg-yellow-50 border-yellow-200 text-yellow-800
+                                {% else %}bg-blue-50 border-blue-200 text-blue-800{% endif %}">
+                                <div class="flex items-center">
+                                    {% if message.tags == 'success' %}
+                                        <i class="fas fa-check-circle mr-2"></i>
+                                    {% elif message.tags == 'error' %}
+                                        <i class="fas fa-exclamation-circle mr-2"></i>
+                                    {% elif message.tags == 'warning' %}
+                                        <i class="fas fa-exclamation-triangle mr-2"></i>
+                                    {% else %}
+                                        <i class="fas fa-info-circle mr-2"></i>
+                                    {% endif %}
+                                    {{ message }}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </form>
+
+                    <div id="loading-overlay" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                        <div class="bg-white rounded-lg p-8 max-w-sm mx-4">
+                            <div class="text-center">
+                                <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
+                                <h3 class="text-lg font-semibold text-gray-800 mb-2">Procesando archivo...</h3>
+                                <p class="text-gray-600">Por favor espera mientras procesamos tu archivo Excel.</p>
+                            </div>
+                        </div>
+                    </div>
+                
+
+                </div>
+
+                <!-- Candidates Ranking -->
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
+                        <i class="fas fa-info-circle text-primary mr-3"></i>
+                        Instrucciones
+                    </h2>
+
+                    <div class="mb-8">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4 flex items-center">
+                            <i class="fas fa-table text-warning mr-2"></i>
+                            Campos Requeridos en el Excel
+                        </h3>
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+                            <p class="text-sm text-yellow-800 mb-2">
+                                <i class="fas fa-exclamation-triangle mr-1"></i>
+                                Tu archivo Excel debe contener exactamente estas columnas:
+                            </p>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="bg-primary text-white px-2 py-1 rounded text-xs font-bold mr-3">1</span>
+                                <code class="bg-gray-200 px-2 py-1 rounded text-sm font-mono">nombres_usuario</code>
+                            </div>
+                            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="bg-primary text-white px-2 py-1 rounded text-xs font-bold mr-3">2</span>
+                                <code class="bg-gray-200 px-2 py-1 rounded text-sm font-mono">apellidos_usuario</code>
+                            </div>
+                            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="bg-primary text-white px-2 py-1 rounded text-xs font-bold mr-3">3</span>
+                                <code class="bg-gray-200 px-2 py-1 rounded text-sm font-mono">tipo_documento</code>
+                            </div>
+                            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="bg-primary text-white px-2 py-1 rounded text-xs font-bold mr-3">4</span>
+                                <code class="bg-gray-200 px-2 py-1 rounded text-sm font-mono">numero_documento</code>
+                            </div>
+                            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="bg-primary text-white px-2 py-1 rounded text-xs font-bold mr-3">5</span>
+                                <code class="bg-gray-200 px-2 py-1 rounded text-sm font-mono">email_usuario</code>
+                            </div>
+                            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="bg-primary text-white px-2 py-1 rounded text-xs font-bold mr-3">6</span>
+                                <code class="bg-gray-200 px-2 py-1 rounded text-sm font-mono">numero_celular</code>
+                            </div>
+                            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="bg-primary text-white px-2 py-1 rounded text-xs font-bold mr-3">7</span>
+                                <code class="bg-gray-200 px-2 py-1 rounded text-sm font-mono">ficha</code>
+                            </div>
+                            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="bg-primary text-white px-2 py-1 rounded text-xs font-bold mr-3">8</span>
+                                <code class="bg-gray-200 px-2 py-1 rounded text-sm font-mono">estado</code>
+                            </div>
+                            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="bg-primary text-white px-2 py-1 rounded text-xs font-bold mr-3">9</span>
+                                <code class="bg-gray-200 px-2 py-1 rounded text-sm font-mono">rol</code>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4 flex items-center">
+                            <i class="fas fa-eye text-success mr-2"></i>
+                            Ejemplo de Datos
+                        </h3>
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4 overflow-x-auto">
+                            <table class="w-full text-xs">
+                                <thead>
+                                    <tr class="bg-green-100">
+                                        <th class="p-2 text-left font-semibold">nombres_usuario</th>
+                                        <th class="p-2 text-left font-semibold">apellidos_usuario</th>
+                                        <th class="p-2 text-left font-semibold">tipo_documento</th>
+                                        <th class="p-2 text-left font-semibold">numero_documento</th>
+                                        <th class="p-2 text-left font-semibold">email_usuario</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-green-200">
+                                        <td class="p-2">Juan Carlos</td>
+                                        <td class="p-2">García López</td>
+                                        <td class="p-2">C.C</td>
+                                        <td class="p-2">12345678</td>
+                                        <td class="p-2">juan.garcia@email.com</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-2">María Elena</td>
+                                        <td class="p-2">Rodríguez Pérez</td>
+                                        <td class="p-2">T.I</td>
+                                        <td class="p-2">98765432</td>
+                                        <td class="p-2">maria.rodriguez@email.com</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4 overflow-x-auto">
+                            <table class="w-full text-xs">
+                                <thead>
+                                    <tr class="bg-blue-100">
+                                        <th class="p-2 text-left font-semibold">numero_celular</th>
+                                        <th class="p-2 text-left font-semibold">ficha</th>
+                                        <th class="p-2 text-left font-semibold">estado</th>
+                                        <th class="p-2 text-left font-semibold">rol</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-blue-200">
+                                        <td class="p-2">3001234567</td>
+                                        <td class="p-2">2691851</td>
+                                        <td class="p-2">activo</td>
+                                        <td class="p-2">votante</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-2">3109876543</td>
+                                        <td class="p-2">2691852</td>
+                                        <td class="p-2">activo</td>
+                                        <td class="p-2">candidato</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+          
+                    <div class="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                        <h4 class="font-semibold text-amber-800 mb-2 flex items-center">
+                            <i class="fas fa-lightbulb mr-2"></i>
+                            Notas Importantes
+                        </h4>
+                        <ul class="text-sm text-amber-700 space-y-1">
+                            <li>• Formato permitido: .xlsx o .xls</li>
+                            <li>• Primera fila debe contener los nombres de columnas exactos</li>
+                            <li>• No dejar filas vacías entre datos</li>
+                            <li>• Verificar que todos los campos estén completos</li>
+                            <li>• El archivo no debe superar los 10MB</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Recent Activities & Candidates -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Recent Activities -->
+                <div class="lg:col-span-2 bg-white rounded-lg shadow-sm p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">Actividades Recientes</h3>
+                        <a href="#" class="text-sm font-medium text-green-600 hover:text-green-800">Ver todas</a>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Usuario</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Acción</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Fecha</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div
+                                                class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
+                                                <i class="fas fa-user text-gray-500"></i>
+                                            </div>
+                                            <div class="ml-3">
+                                                <p class="text-sm font-medium text-gray-900">Juan Pérez</p>
+                                                <p class="text-xs text-gray-500">Estudiante</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <p class="text-sm text-gray-900">Voto registrado</p>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <p class="text-sm text-gray-500">Hoy, 10:23 AM</p>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span
+                                            class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                            Completado
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div
+                                                class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
+                                                <i class="fas fa-user text-gray-500"></i>
+                                            </div>
+                                            <div class="ml-3">
+                                                <p class="text-sm font-medium text-gray-900">María González</p>
+                                                <p class="text-xs text-gray-500">Docente</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <p class="text-sm text-gray-900">Voto registrado</p>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <p class="text-sm text-gray-500">Hoy, 9:45 AM</p>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span
+                                            class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                            Completado
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div
+                                                class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
+                                                <i class="fas fa-user text-gray-500"></i>
+                                            </div>
+                                            <div class="ml-3">
+                                                <p class="text-sm font-medium text-gray-900">Carlos Rodríguez</p>
+                                                <p class="text-xs text-gray-500">Administrativo</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <p class="text-sm text-gray-900">Intento fallido</p>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <p class="text-sm text-gray-500">Hoy, 9:30 AM</p>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span
+                                            class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
+                                            Error
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div
+                                                class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
+                                                <i class="fas fa-user text-gray-500"></i>
+                                            </div>
+                                            <div class="ml-3">
+                                                <p class="text-sm font-medium text-gray-900">Ana Martínez</p>
+                                                <p class="text-xs text-gray-500">Estudiante</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <p class="text-sm text-gray-900">Registro actualizado</p>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <p class="text-sm text-gray-500">Ayer, 3:15 PM</p>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span
+                                            class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                                            Actualizado
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Top Candidates -->
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">Candidatos Destacados</h3>
+                        <a href="#" class="text-sm font-medium text-green-600 hover:text-green-800">Ver todos</a>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                            <img class="h-12 w-12 rounded-full" src="/api/placeholder/120/120" alt="Candidato">
+                            <div class="ml-3">
+                                <p class="text-sm font-medium text-gray-900">Laura Valencia</p>
+                                <p class="text-xs text-gray-500">Representante Estudiantil</p>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-24 h-1.5 bg-gray-200 rounded overflow-hidden">
+                                        <div class="bg-green-500 h-1.5 rounded" style="width: 75%"></div>
+                                    </div>
+                                    <p class="text-xs font-medium text-gray-500 ml-2">75%</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                            <img class="h-12 w-12 rounded-full" src="/api/placeholder/120/120" alt="Candidato">
+                            <div class="ml-3">
+                                <p class="text-sm font-medium text-gray-900">Miguel Sánchez</p>
+                                <p class="text-xs text-gray-500">Representante Estudiantil</p>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-24 h-1.5 bg-gray-200 rounded overflow-hidden">
+                                        <div class="bg-green-500 h-1.5 rounded" style="width: 60%"></div>
+                                    </div>
+                                    <p class="text-xs font-medium text-gray-500 ml-2">60%</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                            <img class="h-12 w-12 rounded-full" src="/api/placeholder/120/120" alt="Candidato">
+                            <div class="ml-3">
+                                <p class="text-sm font-medium text-gray-900">Patricia Gómez</p>
+                                <p class="text-xs text-gray-500">Representante Docente</p>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-24 h-1.5 bg-gray-200 rounded overflow-hidden">
+                                        <div class="bg-green-500 h-1.5 rounded" style="width: 45%"></div>
+                                    </div>
+                                    <p class="text-xs font-medium text-gray-500 ml-2">45%</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                            <img class="h-12 w-12 rounded-full" src="/api/placeholder/120/120" alt="Candidato">
+                            <div class="ml-3">
+                                <p class="text-sm font-medium text-gray-900">Roberto Jiménez</p>
+                                <p class="text-xs text-gray-500">Representante Administrativo</p>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-24 h-1.5 bg-gray-200 rounded overflow-hidden">
+                                        <div class="bg-green-500 h-1.5 rounded" style="width: 30%"></div>
+                                    </div>
+                                    <p class="text-xs font-medium text-gray-500 ml-2">30%</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="mt-8 text-center pb-6">
+                <p class="text-sm text-gray-500">© 2025 SENA - Sistema Electoral. Todos los derechos reservados.</p>
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('file-input');
+        const fileInfo = document.getElementById('file-info');
+        const uploadBtn = document.getElementById('upload-btn');
+        const uploadForm = document.getElementById('upload-form');
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const dropZone = document.getElementById('drop-zone');
+
+    
+        fileInput.addEventListener('change', handleFileSelect);
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+              
+                const validTypes = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 
+                                   'application/vnd.ms-excel'];
+                
+                if (!validTypes.includes(file.type) && !file.name.match(/\.(xlsx|xls)$/i)) {
+                    alert('Por favor selecciona un archivo Excel válido (.xlsx o .xls)');
+                    fileInput.value = '';
+                    return;
+                }
+
+                if (file.size > 10 * 1024 * 1024) {
+                    alert('El archivo es demasiado grande. Máximo 10MB permitido.');
+                    fileInput.value = '';
+                    return;
+                }
+
+                document.getElementById('file-name').textContent = file.name;
+                document.getElementById('file-size').textContent = formatFileSize(file.size);
+                fileInfo.classList.remove('hidden');
+                uploadBtn.disabled = false;
+                uploadBtn.classList.remove('bg-gray-400');
+                uploadBtn.classList.add('bg-primary', 'hover:bg-secondary');
+            }
+        }
+
+        function removeFile() {
+            fileInput.value = '';
+            fileInfo.classList.add('hidden');
+            uploadBtn.disabled = true;
+            uploadBtn.classList.remove('bg-primary', 'hover:bg-secondary');
+            uploadBtn.classList.add('bg-gray-400');
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+    
+        uploadForm.addEventListener('submit', function(e) {
+            if (fileInput.files[0]) {
+                uploadBtn.disabled = true;
+                uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Procesando...';
+                setTimeout(() => {
+                    loadingOverlay.classList.remove('hidden');
+                }, 100);
+            }
+        });
+
+ 
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('border-primary', 'bg-blue-50');
+        });
+        
+        dropZone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-primary', 'bg-blue-50');
+        });
+        
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-primary', 'bg-blue-50');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                const event = new Event('change', { bubbles: true });
+                fileInput.dispatchEvent(event);
+            }
+        });
+
+    
+        window.addEventListener('load', function() {
+            loadingOverlay.classList.add('hidden');
+        });
+    </script>
+</body>
+</html>

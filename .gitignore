@@ -4,3 +4,455 @@ __pycache__/
 *.pyd
 migrations/
 *.sqlite3
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carga Masiva de Usuarios - Excel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#1E40AF',
+                        success: '#10B981',
+                        warning: '#F59E0B',
+                        error: '#EF4444'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+ 
+
+
+    <div class="container mx-auto px-4 py-8">
+  
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">
+                <i class="fas fa-users text-primary mr-3"></i>
+                Carga Masiva de Usuarios
+            </h1>
+            <p class="text-gray-600 text-lg">Sube tu archivo Excel para importar usuarios al sistema</p>
+        </div>
+
+        <div class="max-w-6xl mx-auto">
+            <div class="grid lg:grid-cols-2 gap-8">
+
+                <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
+                        <i class="fas fa-upload text-primary mr-3"></i>
+                        Cargar Archivo
+                    </h2>
+                    <form method="post" enctype="multipart/form-data" id="upload-form">
+                        {% csrf_token %}
+                        
+                        <div class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-primary transition-colors duration-300 cursor-pointer group" id="drop-zone">
+                            <div class="mb-4">
+                                <i class="fas fa-cloud-upload-alt text-6xl text-gray-400 group-hover:text-primary transition-colors duration-300"></i>
+                            </div>
+                            <p class="text-lg font-medium text-gray-700 mb-2">Arrastra tu archivo Excel aquí</p>
+                            <p class="text-gray-500 mb-4">o haz clic para seleccionar</p>
+                            <form method="post" enctype="multipart/form-data">
+
+                            <input type="file" 
+                                   name="archivo" 
+                                   id="file-input" 
+                                   accept=".xlsx,.xls"
+                                   required
+                                   class="hidden">
+                            
+                            <button type="button" onclick="document.getElementById('file-input').click()" 
+                                    class="bg-primary hover:bg-secondary text-white px-6 py-3 rounded-lg transition-colors duration-300 font-medium">
+                                <i class="fas fa-folder-open mr-2"></i>
+                                Seleccionar Archivo
+                            </button>
+                        </div>
+                        <div id="file-info" class="hidden mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <i class="fas fa-file-excel text-green-600 mr-3 text-xl"></i>
+                                    <div>
+                                        <p class="font-medium text-green-800" id="file-name"></p>
+                                        <p class="text-sm text-green-600" id="file-size"></p>
+                                    </div>
+                                </div>
+                                <button type="button" onclick="removeFile()" class="text-red-500 hover:text-red-700">
+                                    <i class="fas fa-times text-xl"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <input type="hidden" name="action" value="upload_users">
+
+                        <div class="mt-8">
+                            <button type="submit" 
+                                    id="upload-btn" 
+                                    disabled 
+                                    class="w-full bg-gray-400 text-white py-4 rounded-lg font-semibold text-lg transition-all duration-300 disabled:cursor-not-allowed">
+                                <i class="fas fa-upload mr-2"></i>
+                                Subir y Procesar Archivo
+                            </button>
+                        </div>
+                        {% if form.errors %}
+                        <div class="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                            <h4 class="font-semibold text-red-800 mb-2 flex items-center">
+                                <i class="fas fa-exclamation-circle mr-2"></i>
+                                Errores en el formulario
+                            </h4>
+                            <ul class="text-sm text-red-700 space-y-1">
+                                {% for field, errors in form.errors.items %}
+                                    {% for error in errors %}
+                                        <li>• {{ error }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                        {% if messages %}
+                        <div class="mt-6 space-y-3">
+                            {% for message in messages %}
+                            <div class="p-4 rounded-lg border
+                                {% if message.tags == 'success' %}bg-green-50 border-green-200 text-green-800
+                                {% elif message.tags == 'error' %}bg-red-50 border-red-200 text-red-800
+                                {% elif message.tags == 'warning' %}bg-yellow-50 border-yellow-200 text-yellow-800
+                                {% else %}bg-blue-50 border-blue-200 text-blue-800{% endif %}">
+                                <div class="flex items-center">
+                                    {% if message.tags == 'success' %}
+                                        <i class="fas fa-check-circle mr-2"></i>
+                                    {% elif message.tags == 'error' %}
+                                        <i class="fas fa-exclamation-circle mr-2"></i>
+                                    {% elif message.tags == 'warning' %}
+                                        <i class="fas fa-exclamation-triangle mr-2"></i>
+                                    {% else %}
+                                        <i class="fas fa-info-circle mr-2"></i>
+                                    {% endif %}
+                                    {{ message }}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </form>
+
+                    <div id="loading-overlay" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                        <div class="bg-white rounded-lg p-8 max-w-sm mx-4">
+                            <div class="text-center">
+                                <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
+                                <h3 class="text-lg font-semibold text-gray-800 mb-2">Procesando archivo...</h3>
+                                <p class="text-gray-600">Por favor espera mientras procesamos tu archivo Excel.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
+                        <i class="fas fa-info-circle text-primary mr-3"></i>
+                        Instrucciones
+                    </h2>
+
+                    <div class="mb-8">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4 flex items-center">
+                            <i class="fas fa-table text-warning mr-2"></i>
+                            Campos Requeridos en el Excel
+                        </h3>
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+                            <p class="text-sm text-yellow-800 mb-2">
+                                <i class="fas fa-exclamation-triangle mr-1"></i>
+                                Tu archivo Excel debe contener exactamente estas columnas:
+                            </p>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="bg-primary text-white px-2 py-1 rounded text-xs font-bold mr-3">1</span>
+                                <code class="bg-gray-200 px-2 py-1 rounded text-sm font-mono">nombres_usuario</code>
+                            </div>
+                            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="bg-primary text-white px-2 py-1 rounded text-xs font-bold mr-3">2</span>
+                                <code class="bg-gray-200 px-2 py-1 rounded text-sm font-mono">apellidos_usuario</code>
+                            </div>
+                            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="bg-primary text-white px-2 py-1 rounded text-xs font-bold mr-3">3</span>
+                                <code class="bg-gray-200 px-2 py-1 rounded text-sm font-mono">tipo_documento</code>
+                            </div>
+                            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="bg-primary text-white px-2 py-1 rounded text-xs font-bold mr-3">4</span>
+                                <code class="bg-gray-200 px-2 py-1 rounded text-sm font-mono">numero_documento</code>
+                            </div>
+                            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="bg-primary text-white px-2 py-1 rounded text-xs font-bold mr-3">5</span>
+                                <code class="bg-gray-200 px-2 py-1 rounded text-sm font-mono">email_usuario</code>
+                            </div>
+                            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="bg-primary text-white px-2 py-1 rounded text-xs font-bold mr-3">6</span>
+                                <code class="bg-gray-200 px-2 py-1 rounded text-sm font-mono">numero_celular</code>
+                            </div>
+                            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="bg-primary text-white px-2 py-1 rounded text-xs font-bold mr-3">7</span>
+                                <code class="bg-gray-200 px-2 py-1 rounded text-sm font-mono">ficha</code>
+                            </div>
+                            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="bg-primary text-white px-2 py-1 rounded text-xs font-bold mr-3">8</span>
+                                <code class="bg-gray-200 px-2 py-1 rounded text-sm font-mono">estado</code>
+                            </div>
+                            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="bg-primary text-white px-2 py-1 rounded text-xs font-bold mr-3">9</span>
+                                <code class="bg-gray-200 px-2 py-1 rounded text-sm font-mono">rol</code>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4 flex items-center">
+                            <i class="fas fa-eye text-success mr-2"></i>
+                            Ejemplo de Datos
+                        </h3>
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4 overflow-x-auto">
+                            <table class="w-full text-xs">
+                                <thead>
+                                    <tr class="bg-green-100">
+                                        <th class="p-2 text-left font-semibold">nombres_usuario</th>
+                                        <th class="p-2 text-left font-semibold">apellidos_usuario</th>
+                                        <th class="p-2 text-left font-semibold">tipo_documento</th>
+                                        <th class="p-2 text-left font-semibold">numero_documento</th>
+                                        <th class="p-2 text-left font-semibold">email_usuario</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-green-200">
+                                        <td class="p-2">Juan Carlos</td>
+                                        <td class="p-2">García López</td>
+                                        <td class="p-2">CC</td>
+                                        <td class="p-2">12345678</td>
+                                        <td class="p-2">juan.garcia@email.com</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-2">María Elena</td>
+                                        <td class="p-2">Rodríguez Pérez</td>
+                                        <td class="p-2">TI</td>
+                                        <td class="p-2">98765432</td>
+                                        <td class="p-2">maria.rodriguez@email.com</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4 overflow-x-auto">
+                            <table class="w-full text-xs">
+                                <thead>
+                                    <tr class="bg-blue-100">
+                                        <th class="p-2 text-left font-semibold">numero_celular</th>
+                                        <th class="p-2 text-left font-semibold">ficha</th>
+                                        <th class="p-2 text-left font-semibold">estado</th>
+                                        <th class="p-2 text-left font-semibold">rol</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-blue-200">
+                                        <td class="p-2">3001234567</td>
+                                        <td class="p-2">2691851</td>
+                                        <td class="p-2">Activo</td>
+                                        <td class="p-2">Aprendiz</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-2">3109876543</td>
+                                        <td class="p-2">2691852</td>
+                                        <td class="p-2">Activo</td>
+                                        <td class="p-2">Instructor</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+          
+                    <div class="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                        <h4 class="font-semibold text-amber-800 mb-2 flex items-center">
+                            <i class="fas fa-lightbulb mr-2"></i>
+                            Notas Importantes
+                        </h4>
+                        <ul class="text-sm text-amber-700 space-y-1">
+                            <li>• Formato permitido: .xlsx o .xls</li>
+                            <li>• Primera fila debe contener los nombres de columnas exactos</li>
+                            <li>• No dejar filas vacías entre datos</li>
+                            <li>• Verificar que todos los campos estén completos</li>
+                            <li>• El archivo no debe superar los 10MB</li>
+                        </ul>
+                    </div>
+
+                    
+                    <div class="mt-6">
+                        <a href="" 
+                           class="inline-flex items-center bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-lg transition-colors duration-300">
+                            <i class="fas fa-download mr-2"></i>
+                            Descargar Plantilla Excel
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    
+        {% if upload_results %}
+        <div class="max-w-6xl mx-auto mt-8">
+            <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-chart-line text-success mr-3"></i>
+                    Resultado del Procesamiento
+                </h2>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
+                        <i class="fas fa-check-circle text-green-500 text-4xl mb-3"></i>
+                        <h3 class="text-2xl font-bold text-green-700">{{ upload_results.success_count }}</h3>
+                        <p class="text-green-600">Registros Exitosos</p>
+                    </div>
+                    <div class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+                        <i class="fas fa-exclamation-triangle text-red-500 text-4xl mb-3"></i>
+                        <h3 class="text-2xl font-bold text-red-700">{{ upload_results.error_count }}</h3>
+                        <p class="text-red-600">Registros con Errores</p>
+                    </div>
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
+                        <i class="fas fa-list text-blue-500 text-4xl mb-3"></i>
+                        <h3 class="text-2xl font-bold text-blue-700">{{ upload_results.total_count }}</h3>
+                        <p class="text-blue-600">Total Procesados</p>
+                    </div>
+                </div>
+
+                {% if upload_results.errors %}
+                <div class="mt-8">
+                    <h3 class="text-lg font-semibold text-red-700 mb-4">Detalles de Errores:</h3>
+                    <div class="bg-red-50 border border-red-200 rounded-lg p-4 max-h-60 overflow-y-auto">
+                        <ul class="text-sm text-red-700 space-y-2">
+                            {% for error in upload_results.errors %}
+                            <li class="flex items-start">
+                                <i class="fas fa-exclamation-circle mr-2 mt-1"></i>
+                                <span>Fila {{ error.row }}: {{ error.message }}</span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('file-input');
+        const fileInfo = document.getElementById('file-info');
+        const uploadBtn = document.getElementById('upload-btn');
+        const uploadForm = document.getElementById('upload-form');
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const dropZone = document.getElementById('drop-zone');
+
+    
+        fileInput.addEventListener('change', handleFileSelect);
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+              
+                const validTypes = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 
+                                   'application/vnd.ms-excel'];
+                
+                if (!validTypes.includes(file.type) && !file.name.match(/\.(xlsx|xls)$/i)) {
+                    alert('Por favor selecciona un archivo Excel válido (.xlsx o .xls)');
+                    fileInput.value = '';
+                    return;
+                }
+
+                if (file.size > 10 * 1024 * 1024) {
+                    alert('El archivo es demasiado grande. Máximo 10MB permitido.');
+                    fileInput.value = '';
+                    return;
+                }
+
+                document.getElementById('file-name').textContent = file.name;
+                document.getElementById('file-size').textContent = formatFileSize(file.size);
+                fileInfo.classList.remove('hidden');
+                uploadBtn.disabled = false;
+                uploadBtn.classList.remove('bg-gray-400');
+                uploadBtn.classList.add('bg-primary', 'hover:bg-secondary');
+            }
+        }
+
+        function removeFile() {
+            fileInput.value = '';
+            fileInfo.classList.add('hidden');
+            uploadBtn.disabled = true;
+            uploadBtn.classList.remove('bg-primary', 'hover:bg-secondary');
+            uploadBtn.classList.add('bg-gray-400');
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+    
+        uploadForm.addEventListener('submit', function(e) {
+            if (fileInput.files[0]) {
+                uploadBtn.disabled = true;
+                uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Procesando...';
+                setTimeout(() => {
+                    loadingOverlay.classList.remove('hidden');
+                }, 100);
+            }
+        });
+
+ 
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('border-primary', 'bg-blue-50');
+        });
+        
+        dropZone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-primary', 'bg-blue-50');
+        });
+        
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-primary', 'bg-blue-50');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                const event = new Event('change', { bubbles: true });
+                fileInput.dispatchEvent(event);
+            }
+        });
+
+    
+        window.addEventListener('load', function() {
+            loadingOverlay.classList.add('hidden');
+        });
+    </script>
+</body>
+</html>

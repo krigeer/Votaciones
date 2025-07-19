@@ -17,7 +17,7 @@ class Ficha(models.Model):
     Programa = models.ForeignKey(Programas, on_delete=models.CASCADE)
     numeroFicha = models.BigIntegerField()
     def __str__(self):
-        return self.numeroFicha
+        return str(self.numeroFicha)
 
 class Estado(models.Model):
     idEstado = models.AutoField(primary_key=True)
@@ -81,3 +81,11 @@ class Voto(models.Model):
 
     def __str__(self):
         return f"{self.votante.nombres_usuario} votó por {self.candidato.usuario.nombres_usuario}"
+    
+class FechaVotacion(models.Model):
+    fecha_inicio = models.DateTimeField()
+    fecha_fin = models.DateTimeField()
+
+    def __str__(self):
+        return self.fecha_inicio.strftime('%d-%m-%Y %H:%M:%S') 
+    # + " - " + self.fecha_fin.strftime('%Y-%m-%d %H:%M:%S')

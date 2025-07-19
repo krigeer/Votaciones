@@ -2,11 +2,32 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import LoginForm
 from .utils import validar_contrasena
-from .models import Usuario, Password, Estado
+from .models import Usuario, Password, FechaVotacion
 import hashlib
+from datetime import datetime
+from django.utils import timezone
 
 def index(request):
-    return render(request, 'index.html')
+    ultima_fecha = FechaVotacion.objects.order_by('-id').first()
+    tiempo_restante = None
+    fecha_fin_js = None 
+
+    if ultima_fecha and ultima_fecha.fecha_fin:
+        ahora = timezone.now()
+        diferencia = ultima_fecha.fecha_fin - ahora
+
+        if diferencia.total_seconds() > 0:
+            fecha_fin_js = ultima_fecha.fecha_fin.isoformat()  
+            tiempo_restante = f'{diferencia.days} días'
+        else:
+            tiempo_restante = "La votación ya finalizó."
+
+    context = {
+        'ultima_fecha': ultima_fecha,
+        'tiempo_restante': tiempo_restante,
+        'fecha_fin_js': fecha_fin_js
+    }
+    return render(request, 'index.html', context)
 
 def login(request):
     if request.method == 'POST':

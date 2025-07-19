@@ -1,4 +1,5 @@
 import re
+import string ,hashlib, random, openpyxl
 
 def validar_contrasena(password):
     if len(password) < 8:
@@ -17,3 +18,7 @@ def validar_contrasena(password):
         return False
 
     return True
+
+def generar_password():
+    return ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+

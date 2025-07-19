@@ -203,7 +203,7 @@
     </section>
 
 
-    <section class="py-16 relative bg-cover bg-center" style="background-image: url('/api/placeholder/1920/600');">
+    <section class="py-16 relative bg-cover bg-center" style="background-image: url('../static/img/reloj.jpg');">
         <div class="absolute inset-0 bg-black opacity-50"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="text-center mb-10">
@@ -352,6 +352,38 @@
             </p>
         </div>
     </footer>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const fechaFin = new Date("{{ fecha_fin_js }}");
+
+        function actualizarCuentaRegresiva() {
+            const ahora = new Date();
+            const diferencia = fechaFin - ahora;
+
+            if (diferencia <= 0) {
+                document.getElementById('countdown-days').textContent = "0";
+                document.getElementById('countdown-hours').textContent = "0";
+                document.getElementById('countdown-minutes').textContent = "0";
+                document.getElementById('countdown-seconds').textContent = "0";
+                return;
+            }
+
+            const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+            const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
+            const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
+
+            document.getElementById('countdown-days').textContent = dias;
+            document.getElementById('countdown-hours').textContent = horas;
+            document.getElementById('countdown-minutes').textContent = minutos;
+            document.getElementById('countdown-seconds').textContent = segundos;
+        }
+
+        setInterval(actualizarCuentaRegresiva, 1000);
+        actualizarCuentaRegresiva(); 
+    });
+</script>
+
 </body>
 
 </html>
