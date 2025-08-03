@@ -1,51 +1,41 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Candidatos Electorales</title>
+    <title>SENA - Sistema Electoral | Candidatos</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/stilo.css' %}">
+    <link rel="shortcut icon" href="{% static 'img/cgti.png' %}" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'green-custom': {
-                            50: '#f0fdf4',
-                            100: '#dcfce7',
-                            500: '#22c55e',
-                            600: '#16a34a',
-                            700: '#15803d',
-                            800: '#166534',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
 </head>
 <body class="bg-white min-h-screen">
     <!-- Header Fijo -->
-    <header class="fixed top-0 left-0 right-0 bg-gradient-to-r from-green-700 to-green-600 shadow-lg z-50">
-        <div class="container mx-auto px-4 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-3">
-                    <div class="bg-white p-2 rounded-full">
-                        <svg class="w-6 h-6 text-green-700" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                    </div>
-                    <h1 class="text-2xl font-bold text-white">Sistema Electoral</h1>
-                </div>
-                <div class="hidden md:flex items-center space-x-4">
-                    <span class="text-green-100">Consulta de Candidatos</span>
-                    <div class="bg-green-800 px-3 py-1 rounded-full">
-                        <span class="text-white text-sm font-medium">2024</span>
+    <nav class="bg-white shadow-sm fixed w-full z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <img class="h-8 w-auto" src="{% static 'img/cgti.png' %}" alt="SENA Logo">
+                        <span class="ml-2 text-xl font-bold text-gray-800">SENA Electoral</span>
                     </div>
                 </div>
+                <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
+                    <a href="{% url 'inicio' %}"
+                        class="nav-link text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">Inicio</a>
+                </div>
+                {% if request.session.is_authenticated %}
+                <div class="flex items-center">
+                    <a href="{% url 'login' %}"
+                        class="hidden md:block sena-button text-white hover:bg-green-800 px-4 py-2 rounded-md text-sm font-medium">Ingresar</a>
+                </div>
+                {% endif %}
             </div>
         </div>
-    </header>
+    </nav>
 
     <!-- Contenido Principal -->
     <main class="pt-24 pb-8">
@@ -74,162 +64,47 @@
 
             <!-- Grid de Candidatos -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                <!-- Candidato 1 -->
-                <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                    <div class="relative">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face" 
-                             alt="Ana García" 
-                             class="w-full h-48 object-cover">
-                        <div class="absolute top-3 right-3 bg-green-600 text-white px-2 py-1 rounded-full text-xs font-semibold">
-                            #001
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">Ana García Rodríguez</h3>
-                        <p class="text-gray-600 mb-1">
-                            <span class="font-medium">Ficha:</span> ELE-2024-001
-                        </p>
-                        <p class="text-green-700 font-semibold mb-4">Alcaldesa</p>
-                        <button class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                            </svg>
-                            <span>Ver propuestas</span>
-                        </button>
-                    </div>
+                {% for candidato in page_obj %}
+            <div class="bg-white overflow-hidden shadow rounded-lg transition-all duration-300 card-hover">
+                <div class="relative pb-48">
+                    <img class="absolute h-full w-full object-cover" src="{{candidato.foto}}" alt="Foto de candidato">
                 </div>
-
-                <!-- Candidato 2 -->
-                <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                    <div class="relative">
-                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop&crop=face" 
-                             alt="Carlos López" 
-                             class="w-full h-48 object-cover">
-                        <div class="absolute top-3 right-3 bg-green-600 text-white px-2 py-1 rounded-full text-xs font-semibold">
-                            #002
-                        </div>
+                <div class="p-6">
+                    <div class="flex items-baseline">
+                        <span
+                            class="bg-green-100 text-green-800 text-xs px-2 inline-block rounded-full uppercase font-semibold tracking-wide">
+                            {{candidato.usuario.Ficha.Programa.nombre}}
+                        </span>
                     </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">Carlos López Mendoza</h3>
-                        <p class="text-gray-600 mb-1">
-                            <span class="font-medium">Ficha:</span> ELE-2024-002
-                        </p>
-                        <p class="text-green-700 font-semibold mb-4">Alcalde</p>
-                        <button class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                            </svg>
-                            <span>Ver propuestas</span>
-                        </button>
+                    <h4 class="mt-3 text-xl font-semibold leading-tight text-gray-900">
+                        {{candidato.usuario.nombres_usuario}} {{candidato.usuario.apellidos_usuario}}</h4>
+                    <div class="mt-2">
+                        <p class="text-gray-600">Ficha: {{candidato.usuario.Ficha.numeroFicha}}</p>
+                        <p class="text-gray-600">Aspirante a: {{candidato.vacante.nombre_vacante}}</p>
                     </div>
-                </div>
-
-                <!-- Candidato 3 -->
-                <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                    <div class="relative">
-                        <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=300&h=300&fit=crop&crop=face" 
-                             alt="María Fernández" 
-                             class="w-full h-48 object-cover">
-                        <div class="absolute top-3 right-3 bg-green-600 text-white px-2 py-1 rounded-full text-xs font-semibold">
-                            #003
-                        </div>
+                    <div class="mt-4">
+                        <h5 class="text-sm font-semibold text-gray-700">Propuestas principales:</h5>
+                        <ul class="mt-2 text-sm text-gray-600">
+                            {% for propuesta in candidato.propuesta_set.all|slice:":3" %}
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span>{{ propuesta.titulo }}</span>
+                            </li>
+                            {% empty %}
+                            <i class="fa-solid fa-circle-exclamation text-red-500 mt-1 mr-2"></i>
+                            <span>Este candidato no tiene propuestas aún.</span>
+                            {% endfor %}
+                        </ul>
                     </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">María Fernández Silva</h3>
-                        <p class="text-gray-600 mb-1">
-                            <span class="font-medium">Ficha:</span> ELE-2024-003
-                        </p>
-                        <p class="text-green-700 font-semibold mb-4">Concejal</p>
-                        <button class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                            </svg>
-                            <span>Ver propuestas</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Candidato 4 -->
-                <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                    <div class="relative">
-                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=300&h=300&fit=crop&crop=face" 
-                             alt="Roberto Martínez" 
-                             class="w-full h-48 object-cover">
-                        <div class="absolute top-3 right-3 bg-green-600 text-white px-2 py-1 rounded-full text-xs font-semibold">
-                            #004
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">Roberto Martínez Cruz</h3>
-                        <p class="text-gray-600 mb-1">
-                            <span class="font-medium">Ficha:</span> ELE-2024-004
-                        </p>
-                        <p class="text-green-700 font-semibold mb-4">Concejal</p>
-                        <button class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                            </svg>
-                            <span>Ver propuestas</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Candidato 5 -->
-                <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                    <div class="relative">
-                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&h=300&fit=crop&crop=face" 
-                             alt="Laura Jiménez" 
-                             class="w-full h-48 object-cover">
-                        <div class="absolute top-3 right-3 bg-green-600 text-white px-2 py-1 rounded-full text-xs font-semibold">
-                            #005
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">Laura Jiménez Vargas</h3>
-                        <p class="text-gray-600 mb-1">
-                            <span class="font-medium">Ficha:</span> ELE-2024-005
-                        </p>
-                        <p class="text-green-700 font-semibold mb-4">Diputada</p>
-                        <button class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                            </svg>
-                            <span>Ver propuestas</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Candidato 6 -->
-                <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                    <div class="relative">
-                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&h=300&fit=crop&crop=face" 
-                             alt="Diego Ramírez" 
-                             class="w-full h-48 object-cover">
-                        <div class="absolute top-3 right-3 bg-green-600 text-white px-2 py-1 rounded-full text-xs font-semibold">
-                            #006
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">Diego Ramírez Torres</h3>
-                        <p class="text-gray-600 mb-1">
-                            <span class="font-medium">Ficha:</span> ELE-2024-006
-                        </p>
-                        <p class="text-green-700 font-semibold mb-4">Diputado</p>
-                        <button class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                            </svg>
-                            <span>Ver propuestas</span>
-                        </button>
+                    <div class="mt-6">
+                        <a href="{% url 'detalles_candidato' candidato.idCandidato %}"
+                            class="block text-center w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white sena-green sena-button">
+                            Ver perfil completo
+                        </a>
                     </div>
                 </div>
             </div>
+            {% endfor %}
+        </div>
 
             <!-- Mensaje de alerta de ejemplo -->
             <div class="mt-8 bg-red-50 border-l-4 border-red-400 p-4 rounded-r-lg">
@@ -250,35 +125,8 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-50 border-t border-gray-200 mt-12">
-        <div class="container mx-auto px-4 py-6">
-            <div class="text-center text-gray-600">
-                <p>&copy; 2024 Sistema Electoral. Todos los derechos reservados.</p>
-            </div>
-        </div>
-    </footer>
+   {% include 'components/footer.html' %}
 
-    <script>
-        // Funcionalidad para los botones "Ver propuestas"
-        document.querySelectorAll('button').forEach(button => {
-            if (button.textContent.includes('Ver propuestas')) {
-                button.addEventListener('click', function() {
-                    const candidateName = this.closest('.bg-white').querySelector('h3').textContent;
-                    alert(`Cargando propuestas de ${candidateName}...`);
-                });
-            }
-        });
-
-        // Efecto de parallax suave en el scroll
-        window.addEventListener('scroll', function() {
-            const scrolled = window.pageYOffset;
-            const cards = document.querySelectorAll('.bg-white.rounded-xl');
-            
-            cards.forEach((card, index) => {
-                const rate = scrolled * -0.5;
-                card.style.transform = `translateY(${rate * 0.1}px)`;
-            });
-        });
-    </script>
+ 
 </body>
 </html>

@@ -2,10 +2,13 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import LoginForm
 from .utils import validar_contrasena
-from .models import Usuario, Password, FechaVotacion
+from .models import Usuario, Password, FechaVotacion, Candidato, Propuesta
 import hashlib
 from datetime import datetime
 from django.utils import timezone
+from votos.models import Usuario, Candidato, Propuesta
+from django.core.paginator import Paginator
+from django.db.models import Q
 
 
 def index(request):
@@ -67,7 +70,7 @@ def login(request):
                     elif rol == 'candidato':
                         return redirect('appCandidato:candidato')
                     elif rol == 'votante':
-                        return redirect('appVotante:votante')
+                        return redirect('appVotante:votantes')
                     else:
                         messages.error(request, 'Permisos insuficientes')
                         return render(request, "login.html", {'form': form})
@@ -82,8 +85,45 @@ def login(request):
     return render(request, 'login.html', {'form': form})
 
 
-def candidatos(request):
-    return render(request, 'candidatos.html')
+def candidatos(request):  
+    user_id = request.session.get('user_id')
+    usuario = Usuario.objects.get(idUsuario=user_id)
+    nombre_usuario = request.session.get('NombreUsuario')
+
+    # Obtener término de búsqueda desde GET
+    query = request.GET.get('q', '')
+
+    # Filtrar candidatos por nombre del usuario
+    candidatos = Candidato.objects.select_related('usuario').prefetch_related('propuesta_set')
+    if query:
+        candidatos = candidatos.filter(
+            Q(usuario__nombres_usuario__icontains=query) |
+            Q(usuario__apellidos_usuario__icontains=query)
+        )
+
+    # Paginación
+    paginator = Paginator(candidatos, 5)  # 5 candidatos por página
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'user_id': user_id,
+        'nombre_usuario': nombre_usuario,
+        'usuario': usuario,
+        'page_obj': page_obj,
+        'query': query,
+    }
+    return render(request, 'candidatos.html', context)
+
+def detalles_candidato(request, idCandidato):
+    candidato = 2
+    propuestas =3
+
+    context = {
+        'candidato': candidato,
+        'propuestas': propuestas
+    }
+    return render(request, 'detalle_candidato.html', context)
 
 def logout_view(request):
     request.session.flush()  
@@ -91,4 +131,3 @@ def logout_view(request):
 
 
 
-    

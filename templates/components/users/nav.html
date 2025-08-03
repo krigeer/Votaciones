@@ -1,0 +1,28 @@
+{% load static %}
+<header class="bg-white shadow">
+    <div class="flex items-center justify-between px-6 py-4">
+        <div class="flex-1">
+            <h2 class="text-2xl font-bold text-gray-800">Panel de Votaciones</h2>
+            <p class="text-sm text-gray-600">Sistema Electoral SENA</p>
+        </div>
+        <div class="flex items-center space-x-4">
+            <div class="relative dropdown">
+                <button class="flex items-center space-x-2 focus:outline-none">
+                    <img class="h-8 w-8 rounded-full" src="{% static 'img/user.png' %}" alt="">
+                    <span class="hidden md:block text-sm font-medium text-gray-700">{{ nombre_usuario }}</span>
+                </button>
+            </div>
+            <div class="relative dropdown">
+                <button class="flex items-center space-x-2 focus:outline-none">
+                    {% if request.session.is_authenticated %}
+                    <a href="{% url 'logout' %}" class="mt-5 flex items-center text-sm text-red-600 hover:text-red-800">
+                        <i class="fas fa-sign-out-alt mr-2"></i>
+                        <span>Cerrar sesión</span>
+                    </a>
+                    {% endif %}
+                </button>
+            </div>
+
+        </div>
+    </div>
+</header>

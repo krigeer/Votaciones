@@ -11,7 +11,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/stilo.css' %}">
     <link rel="shortcut icon" href="{% static 'img/cgti.png' %}" type="image/x-icon">
-
 </head>
 
 <body class="bg-gray-50 font-sans">
@@ -32,7 +31,7 @@
                     <a href="#como-funciona"
                         class="nav-link text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">Cómo
                         funciona</a>
-                    <a href="{% url 'candidatos' %}"
+                    <a href="{% url 'todos_candidatos' %}"
                         class="nav-link text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">Candidatos</a>
                 </div>
                 <div class="flex items-center">
@@ -57,8 +56,8 @@
                 <a href="#como-funciona"
                     class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Cómo
                     funciona</a>
-                <a href="#candidatos"
-                    class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Candidatos</a>
+                <a href="{% url 'todos_candidatos' %}"
+                        class="nav-link text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">Candidatos</a>
                 <a href="#faq"
                     class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">FAQ</a>
                 <a href="{% url 'login' %}"

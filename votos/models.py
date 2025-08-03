@@ -55,10 +55,22 @@ class Password(models.Model):
     def __str__(self):
         return self.password
     
+class vacantes(models.Model):
+    idPostulacion = models.AutoField(primary_key=True)
+    nombre_vacante = models.CharField(max_length=50, null=True)
+
+    def __str__(self):
+        return f"{self.usuario.nombres_usuario} - {self.estado.estado}"
+
 class Candidato(models.Model):
     idCandidato = models.AutoField(primary_key=True)
+    fecha_postulacion = models.DateTimeField(auto_now_add=True,null=True,blank=True)
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE)
     foto = models.FileField(upload_to='foto_candidato', null=True, blank=True)
+    vacante = models.ForeignKey(vacantes, on_delete=models.CASCADE, null=True, blank=True)
+    estado = models.ForeignKey(Estado, on_delete=models.CASCADE, default=1)
+    
+
 
     def __str__(self):
         return f"Candidato: {self.usuario.nombres_usuario}"

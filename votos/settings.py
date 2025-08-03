@@ -28,7 +28,7 @@ INSTALLED_APPS = [
     'votos',
     'appGestor',
     'appCandidato',
-    'appUser'
+    'appVotante'
 ]
 
 MIDDLEWARE = [
