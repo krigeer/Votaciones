@@ -75,15 +75,25 @@ class UsuarioForm(forms.ModelForm):
         self.fields['Ficha'].empty_label = "Seleccione una ficha"
         self.fields['rol'].empty_label = "Seleccione un rol"
 
-class OtroFormulario(forms.Form):
-    campo1 = forms.CharField(label='Campo 1', max_length=100, widget=forms.TextInput(attrs={
-        'class': 'shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-green-500 mb-4',
-        'placeholder': 'Campo 1'
-    }))
-    campo2 = forms.CharField(label='Campo 2', max_length=100, widget=forms.TextInput(attrs={
-        'class': 'shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-green-500 mb-4',
-        'placeholder': 'Campo 2'
-    }))
+class NuevoCandidatoForm(forms.ModelForm):
+    class Meta:
+        model = Usuario
+        fields = ['rol']
+        labels = {
+            'rol': '',
+        }
+        widgets = {
+            'rol': forms.Select(attrs={
+                'placeholder': 'Rol',
+                'class': 'shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-green-500 mb-4'
+            }),
+        }
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['rol'].empty_label = "Seleccione un rol"
+        self.fields['rol'].initial = None
+        
+    
 
         
         

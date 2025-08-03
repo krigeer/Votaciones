@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notificación | SENA - Sistema Electoral</title>
+    <style>
+        /* Reset básico para emails */
+        body, table, td, p, a, li, blockquote {
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+        
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+            background-color: #f3f4f6 !important;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+        }
+        
+        table {
+            border-collapse: collapse !important;
+            mso-table-lspace: 0pt !important;
+            mso-table-rspace: 0pt !important;
+        }
+        
+        img {
+            border: 0 !important;
+            height: auto !important;
+            line-height: 100% !important;
+            outline: none !important;
+            text-decoration: none !important;
+        }
+        
+        /* Estilos para impresión */
+        @media print {
+            body { 
+                background-color: white !important;
+                print-color-adjust: exact; 
+                -webkit-print-color-adjust: exact; 
+            }
+            .no-print { display: none !important; }
+            .container { max-width: none !important; }
+        }
+        
+        /* Responsive para móviles */
+        @media only screen and (max-width: 600px) {
+            .container {
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+            .mobile-padding {
+                padding: 15px !important;
+            }
+            .mobile-text {
+                font-size: 16px !important;
+                line-height: 24px !important;
+            }
+            .header-text {
+                font-size: 24px !important;
+            }
+        }
+        
+        /* Fix para Outlook */
+        .ExternalClass {
+            width: 100%;
+        }
+        .ExternalClass,
+        .ExternalClass p,
+        .ExternalClass span,
+        .ExternalClass font,
+        .ExternalClass td,
+        .ExternalClass div {
+            line-height: 100%;
+        }
+    </style>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f3f4f6; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+
+    <!-- Contenedor principal -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #b8e3bd;">
+        <tr>
+            <td style="padding: 20px 0;">
+                <!-- Contenedor centrado -->
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" class="container" style="margin: 0 auto; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                    <!-- Header con gradiente simulado (colores de sofia plus) -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #323332 0%, #000000 100%); background-color: #3b82f6; border-radius: 12px 12px 0 0; padding: 30px; text-align: center;">
+                            
+                            <!-- Icono -->
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: 0 auto 20px auto;">
+                                <tr>
+                                    <td style="overflow: hidden; width: 60px; height: 60px; background-color: rgba(255,255,255,0.2); border-radius: 50%; text-align: center; vertical-align: middle;">
+                                        <span style="color: #ffffff; font-size: 24px; font-weight: bold;"><img style=" width: 60px; height: 60px" src="https://www.sena.edu.co/Style%20Library/alayout/images/logoSena.png" alt="📤"></span>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <h1 class="header-text" style="margin: 0; color: #ffffff; font-size: 28px; font-weight: bold; line-height: 1.2;">
+                                Notificación del Sistema Electoral SENA 
+                            </h1>
+                            
+                            <!-- Línea decorativa -->
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: 15px auto 0 auto;">
+                                <tr>
+                                    <td style="width: 60px; height: 3px; background-color: #ffffff; border-radius: 2px;"></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                    <!-- Contenido principal -->
+                    <tr>
+                        <td class="mobile-padding" style="padding: 40px;">
+                            
+                            <!-- Información del destinatario -->
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 30px; background-color: #f8fafc; border-left: 4px solid #3b82f6; border-radius: 6px;">
+                                <tr>
+                                    <td style="padding: 20px;">
+                                        <table role="presentation" cellspacing="0" cellpadding="0" border="0">
+                                            <tr>
+                                                <td style="vertical-align: top; padding-right: 15px;">
+                                                    <span style="color: #3b82f6; font-size: 18px;">👤</span>
+                                                </td>
+                                                <td>
+                                                    <p style="margin: 0 0 5px 0; font-size: 14px; color: #6b7280; font-weight: 600;">
+                                                        Destinatario:
+                                                    </p>
+                                                    <p style="margin: 0; font-size: 16px; color: #111827; font-weight: bold;">
+                                                        {{ correo }}
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <!-- Mensaje del sistema -->
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 30px; border: 2px solid #e5e7eb; border-radius: 8px; background-color: #ffffff;">
+                                <tr>
+                                    <td style="padding: 25px;">
+                                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                            <tr>
+                                                <td style="vertical-align: top; padding-right: 15px; width: 30px;">
+                                                    <span style="color: #10b981; font-size: 20px;">📄</span>
+                                                </td>
+                                                <td>
+                                                    <h2 style="margin: 0 0 15px 0; font-size: 18px; color: #111827; font-weight: 600;">
+                                                        Mensaje:
+                                                    </h2>
+                                                    <div class="mobile-text" style="font-size: 16px; line-height: 1.6; color: #374151;">
+                                                        {{ mensaje }}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <!-- Información adicional -->
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 30px; background-color: #eff6ff; border-radius: 8px;">
+                                <tr>
+                                    <td style="padding: 20px;">
+                                        <table role="presentation" cellspacing="0" cellpadding="0" border="0">
+                                            <tr>
+                                                <td style="vertical-align: top; padding-right: 15px;">
+                                                    <span style="color: #3b82f6; font-size: 18px;">⏰</span>
+                                                </td>
+                                                <td>
+                                                    <p style="margin: 0 0 5px 0; font-size: 14px; color: #1e40af; font-weight: 600;">
+                                                        Fecha de envío:
+                                                    </p>
+                                                    <p style="margin: 0; font-size: 14px; color: #1e40af;">
+                                                        <script>document.write(new Date().toLocaleDateString('es-ES', {year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'}));</script>
+                                                        <noscript>Fecha no disponible</noscript>
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                        </td>
+                    </tr>
+                    
+                    <!-- Footer -->
+                    <tr>
+                        <td style="padding: 30px 40px; border-top: 1px solid #e5e7eb; text-align: center; background-color: #f9fafb; border-radius: 0 0 12px 12px;">
+                            
+                            <p style="margin: 0 0 10px 0; font-size: 14px; color: #6b7280; line-height: 1.5;">
+                                Esta es una notificación automática del sistema.
+                            </p>
+                            <p style="margin: 0 0 20px 0; font-size: 12px; color: #9ca3af;">
+                                Por favor, no responda a este mensaje.
+                            </p>
+                            
+                            <!-- Información de contacto -->
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" class="no-print" style="margin: 0 auto; background-color: #e5e7eb; border-radius: 6px;">
+                                <tr>
+                                    <td style="padding: 15px 20px; text-align: center;">
+                                        <p style="margin: 0; font-size: 12px; color: #6b7280;">
+                                            Si necesita asistencia, contacte a nuestro equipo de soporte.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                        </td>
+                    </tr>
+                    
+                </table>
+                
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>

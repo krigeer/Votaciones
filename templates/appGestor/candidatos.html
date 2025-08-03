@@ -12,7 +12,6 @@
     <link rel="shortcut icon" href="{% static 'img/cgti.png' %}" type="image/x-icon">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="{% static 'css/stilo.css' %}">
-    <meta name="csrf-token" content="{{ csrf_token }}">
     <script src="{% static 'js/index.js' %}"></script>
     <script>
         const buscarUsuarioUrl = "{% url 'appGestor:buscar_usuario' %}";
@@ -48,7 +47,7 @@
             <div class="container mx-auto px-4">
                 <!-- Título de sección -->
                 <div class="text-center mb-8">
-                    <h2 class="text-3xl font-bold text-gray-800 mb-2">Votantes Registrados</h2>
+                    <h2 class="text-3xl font-bold text-gray-800 mb-2">Candidatos Registrados</h2>
                 </div>
                 <div class="text-center mb-8">
                     <form method="get" action="" class="mb-4 flex">
@@ -62,29 +61,25 @@
                 <!-- Grid de Candidatos -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     <!-- Candidato 1 -->
-                    {% for votante in votantes %}
+                    {% for candidato in candidato %}
                     <div
                         class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                         <div class="relative">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face"
+                                alt="Ana García" class="w-full h-48 object-cover">
 
                             <div
                                 class="absolute top-3 right-3 bg-green-600 text-white px-2 py-1 rounded-full text-xs font-semibold">
-                                #{{votante.idUsuario}}
+                                #{{candidato.idUsuario}}
                             </div>
                         </div>
                         <div class="p-6">
-                            <h3 class="text-xl font-bold text-gray-800 mb-2">{{votante.nombres_usuario}}</h3>
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">{{candidato.nombres_usuario}}</h3>
                             <p class="text-gray-600 mb-1">
-                                <span class="font-medium">Apellidos:</span> {{votante.apellidos_usuario}}
+                                <span class="font-medium">Apellidos:</span> {{candidato.apellidos_usuario}}
                             </p>
-                            <p class="text-gray-600 mb-1">
-                                <span class="font-medium">Documento:</span> {{votante.numero_documento}}
-                            </p>
-                            <p class="text-gray-600 mb-1">
-                                <span class="font-medium">Correo:</span> {{votante.email_usuario}}
-                            </p>
-                            <p class="text-green-700 font-semibold mb-4">Ficha: {{ votante.Ficha.numeroFicha }}</p>
-                            <button onclick="volverCandidato({{ votante.idUsuario }})"
+                            <p class="text-green-700 font-semibold mb-4">Ficha: {{candidato.Ficha.numeroFicha}}</p>
+                            <button
                                 class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -92,34 +87,34 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                 </svg>
-                                <span>Volver Candidato</span>
+                                <span>Detalles</span>
                             </button>
                         </div>
                     </div>
                     {% endfor %}
 
                 </div>
-               <div class="flex justify-center mt-4 space-x-4">
-                    {% if votantes.has_previous %}
+                <div class="flex justify-center mt-4 space-x-4">
+                    {% if candidato.has_previous %}
                     <a href="?page=1{% if query %}&q={{ query }}{% endif %}" class="px-3 py-1 bg-gray-200 rounded">
                         &laquo; Primero
                     </a>
-                    <a href="?page={{ votantes.previous_page_number }}{% if query %}&q={{ query }}{% endif %}"
+                    <a href="?page={{ candidato.previous_page_number }}{% if query %}&q={{ query }}{% endif %}"
                         class="px-3 py-1 bg-gray-200 rounded">
                         Anterior
                     </a>
                     {% endif %}
 
                     <span class="px-3 py-1 bg-green-600 text-white rounded">
-                        Página {{ votantes.number }} de {{ votantes.paginator.num_pages }}
+                        Página {{ candidato.number }} de {{ candidato.paginator.num_pages }}
                     </span>
 
-                    {% if votantes.has_next %}
-                    <a href="?page={{ votantes.next_page_number }}{% if query %}&q={{ query }}{% endif %}"
+                    {% if candidato.has_next %}
+                    <a href="?page={{ candidato.next_page_number }}{% if query %}&q={{ query }}{% endif %}"
                         class="px-3 py-1 bg-gray-200 rounded">
                         Siguiente
                     </a>
-                    <a href="?page={{ votantes.paginator.num_pages }}{% if query %}&q={{ query }}{% endif %}"
+                    <a href="?page={{ candidato.paginator.num_pages }}{% if query %}&q={{ query }}{% endif %}"
                         class="px-3 py-1 bg-gray-200 rounded">
                         Última &raquo;
                     </a>
@@ -130,55 +125,6 @@
         <!-- Footer -->
         {% include 'components/footer.html' %}
     </div>
-    <script>
-function volverCandidato(idUsuario) {
-    console.log("ID de usuario a volver candidato:", idUsuario);
-    const csrftoken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    Swal.fire({
-        title: '¿Estás seguro?',
-        text: "El usuario pasará a ser candidato",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Sí, confirmar',
-        cancelButtonText: 'Cancelar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            Swal.fire({
-                title: 'Procesando...',
-                text: 'Actualizando rol y creando registros...',
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                }
-            });
-
-            fetch("{% url 'appGestor:volver_candidato' %}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFToken": csrftoken  
-                },
-                body: JSON.stringify({ idUsuario })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.ok) {
-                    Swal.fire('¡Hecho!', data.msg, 'success').then(() => {
-                        location.reload();
-                    });
-                } else {
-                    Swal.fire('Error', data.msg, 'error');
-                }
-            })
-            .catch(error => {
-                console.error(error);
-                Swal.fire('Error', 'Algo salió mal', 'error');
-            });
-        }
-    });
-}
-</script>
 
 </body>
 

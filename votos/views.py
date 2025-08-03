@@ -7,6 +7,7 @@ import hashlib
 from datetime import datetime
 from django.utils import timezone
 
+
 def index(request):
     ultima_fecha = FechaVotacion.objects.order_by('-id').first()
     tiempo_restante = None
@@ -80,8 +81,14 @@ def login(request):
         form = LoginForm()
     return render(request, 'login.html', {'form': form})
 
-def gestor(request):
-    return render(request, 'appGestor/panel.html')
 
 def candidatos(request):
     return render(request, 'candidatos.html')
+
+def logout_view(request):
+    request.session.flush()  
+    return redirect(login)  
+
+
+
+    

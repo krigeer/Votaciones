@@ -56,6 +56,7 @@ class Password(models.Model):
         return self.password
     
 class Candidato(models.Model):
+    idCandidato = models.AutoField(primary_key=True)
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE)
     foto = models.FileField(upload_to='foto_candidato', null=True, blank=True)
 
