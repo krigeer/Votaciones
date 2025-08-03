@@ -27,12 +27,12 @@
                     <a href="{% url 'inicio' %}"
                         class="nav-link text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">Inicio</a>
                 </div>
-                {% if request.session.is_authenticated %}
+                
                 <div class="flex items-center">
                     <a href="{% url 'login' %}"
                         class="hidden md:block sena-button text-white hover:bg-green-800 px-4 py-2 rounded-md text-sm font-medium">Ingresar</a>
                 </div>
-                {% endif %}
+                
             </div>
         </div>
     </nav>
