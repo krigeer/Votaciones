@@ -86,9 +86,6 @@ def login(request):
 
 
 def candidatos(request):  
-    user_id = request.session.get('user_id')
-    usuario = Usuario.objects.get(idUsuario=user_id)
-    nombre_usuario = request.session.get('NombreUsuario')
 
     # Obtener término de búsqueda desde GET
     query = request.GET.get('q', '')
@@ -107,16 +104,17 @@ def candidatos(request):
     page_obj = paginator.get_page(page_number)
 
     context = {
-        'user_id': user_id,
-        'nombre_usuario': nombre_usuario,
-        'usuario': usuario,
         'page_obj': page_obj,
         'query': query,
     }
     return render(request, 'candidatos.html', context)
 
 def detalles_candidato(request, idCandidato):
-    candidato = 2
+    candidato = Candidato.objects.filter(idCandidato=idCandidato).select_related('usuario').first()
+    if not candidato:
+        messages.error(request, 'Candidato no encontrado')
+        return redirect(candidatos)
+    
     propuestas =3
 
     context = {

@@ -5,7 +5,7 @@
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SENA - Sistema Electoral | Candidatos</title>
+    <title>SENA - Sistema Electoral | Votantes</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
         integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
@@ -62,7 +62,13 @@
             {% for candidato in page_obj %}
             <div class="bg-white overflow-hidden shadow rounded-lg transition-all duration-300 card-hover">
                 <div class="relative pb-48">
-                    <img class="absolute h-full w-full object-cover" src="{{candidato.foto}}" alt="Foto de candidato">
+                     {% if candidato.foto %}
+                    <img class="absolute h-full w-full object-cover" src="{{candidato.foto_url}}"
+                        alt="{{candiato.nombres_usuario}}">
+                    {% else %}
+                    <img src="{% static 'img/default-user.png' %}" alt="Sin foto"
+                        class="absolute h-full w-full object-cover">
+                    {% endif %}
                 </div>
                 <div class="p-6">
                     <div class="flex items-baseline">
@@ -75,7 +81,7 @@
                         {{candidato.usuario.nombres_usuario}} {{candidato.usuario.apellidos_usuario}}</h4>
                     <div class="mt-2">
                         <p class="text-gray-600">Ficha: {{candidato.usuario.Ficha.numeroFicha}}</p>
-                        <p class="text-gray-600">Aspirante a: {{candidato.vacante.nombre_vacante}}</p>
+                        <p class="text-gray-600">Aspirante a: {{candidato.vacante.nombre_postulacion}}</p>
                     </div>
                     <div class="mt-4">
                         <h5 class="text-sm font-semibold text-gray-700">Propuestas principales:</h5>
@@ -119,6 +125,7 @@
         {% endif %}
 
         {% if page_obj.has_next %}
+        
             <a href="?q={{ query }}&page={{ page_obj.paginator.num_pages }}"
                 class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
                 {{ page_obj.paginator.num_pages }}

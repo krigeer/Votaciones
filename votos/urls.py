@@ -12,4 +12,5 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('detalles_candidato/<int:idCandidato>/', views.detalles_candidato, name='detalles_candidato'),
     path('', include('appVotante.urls')),
+    path('', include('appCandidato.urls')),
 ]

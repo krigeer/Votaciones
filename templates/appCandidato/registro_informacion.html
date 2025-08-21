@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Candidato</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="shortcut icon" href="{% static 'img/cgti.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/form_candidatos.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <meta name="csrf-token" content="{{ csrf_token }}">
+</head>
+<body class="min-h-screen gradient-bg relative overflow-hidden">
+    <div class="absolute top-20 left-10 w-32 h-32 bg-green-700 opacity-10 rounded-full floating"></div>
+    <div class="absolute top-60 right-16 w-24 h-24 bg-green-700 opacity-5 rounded-full floating" style="animation-delay: -2s;"></div>
+    <div class="absolute bottom-40 left-20 w-40 h-40 bg-green-700 opacity-5 rounded-full floating" style="animation-delay: -4s;"></div>
+    <header class="glass-effect relative z-10">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
+                        <i class="fas fa-vote-yea text-purple-600 text-lg"></i>
+                    </div>
+                    <h1 class=" text-xl font-bold">Actualización de datos</h1>
+                </div>
+                <button onclick="goBack()" class="glass-effect  px-4 py-2 rounded-lg hover:bg-white hover:bg-opacity-20 transition-all duration-300 flex items-center space-x-2">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Regresar</span>
+                </button>
+            </div>
+        </div>
+    </header>
+    <main class="flex-grow flex items-center justify-center p-4 relative z-10">
+        <div class="w-full max-w-4xl">
+            <div class="text-center mb-12">
+                <p class=" text-opacity-80 text-lg">Gestiona tu campaña desde un solo lugar</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+                <div class="glass-effect rounded-2xl p-8 card-hover cursor-pointer group bg-green-100" onclick="RegistroInformacion()">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-user  text-2xl"></i>
+                        </div>
+                        <h3 class=" font-semibold text-xl mb-2">Mi Perfil</h3>
+                        <p class=" text-opacity-70 text-sm">Actualiza tu foto, postulación y cualidades</p>
+                        <div class="mt-6 flex items-center justify-center text-blue-300">
+                            <span class="text-sm">Ver perfil</span>
+                            <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform duration-300"></i>
+                        </div>
+                    </div>
+                </div>
+                <script type="text/template" id="form-foto" >
+                        <form id="form_foto" method="POST"enctype="multipart/form-data" >
+                            {% csrf_token %}
+                            <input type="hidden" name="form_type" value="form_foto">
+                            {{ form_foto.as_p }}
+                        </form>
+                </script>
+                <div class="glass-effect rounded-2xl p-8 card-hover cursor-pointer group bg-green-100" onclick="navigateTo('proposals')">
+                    <div class="text-center" onclick="RegistroPropuesta()">
+                        <div class="w-16 h-16 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-lightbulb  text-2xl"></i>
+                        </div>
+                        <h3 class=" font-semibold text-xl mb-2">Mis Propuestas</h3>
+                        <p class=" text-opacity-70 text-sm">Gestiona y actualiza tus propuestas de campaña</p>
+                        <div class="mt-6 flex items-center justify-center text-green-300">
+                            <span class="text-sm">Administrar</span>
+                            <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform duration-300"></i>
+                        </div>
+                    </div>
+                </div>
+                <script type="text/template" id="form_propuesta">
+                        <form id="form_propuesta" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="hidden" name="form_type" value="form_propuesta">
+                            {{ form_propuesta.as_p }}
+                        </form>
+                </script>
+
+                <!-- Resultados -->
+                <div class="glass-effect rounded-2xl p-8 card-hover cursor-pointer group bg-green-100" onclick="navigateTo('results')">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-chart-bar  text-2xl"></i>
+                        </div>
+                        <h3 class=" font-semibold text-xl mb-2">Resultados</h3>
+                        <p class=" text-opacity-70 text-sm">Consulta estadísticas y métricas de campaña</p>
+                        <div class="mt-6 flex items-center justify-center text-amber-300">
+                            <span class="text-sm">Ver métricas</span>
+                            <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform duration-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </main>
+
+    <!-- Footer mejorado -->
+    {% include 'components/footer.html' %}
+    <script src="{% static 'js/form_candidatos.js' %}"></script>
+
+    <script>
+        
+        function goBack() {
+            // Implementar función de regreso
+            console.log('Regresando...');
+            window.history.back();
+        }
+
+        // Efecto de partículas sutil
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'absolute w-1 h-1 bg-white opacity-30 rounded-full';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animation = 'floating 8s linear infinite';
+            document.body.appendChild(particle);
+            
+            setTimeout(() => {
+                particle.remove();
+            }, 8000);
+        }
+
+        // Crear partículas ocasionalmente
+        setInterval(createParticle, 3000);
+    </script>
+</body>
+</html>

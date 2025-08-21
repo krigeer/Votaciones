@@ -17,6 +17,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import json
 from votos.views import login
+from datetime import datetime, timedelta
 
 # Create your views here.
 
@@ -333,33 +334,24 @@ def admins(request):
 def candidatos(request):
     if not request.session.get('is_authenticated'):
         return redirect(login)
-    
     user_id = request.session.get('user_id')
     usuario = Usuario.objects.get(idUsuario=user_id)
     nombre_usuario = request.session.get('NombreUsuario')
-
     query = request.GET.get('q', '')
- 
     candidatos_lista = Usuario.objects.filter(rol_id=2)
-    
     if query:
         candidatos_lista = candidatos_lista.filter(
             Q(nombres_usuario__icontains=query) | Q(numero_documento__icontains=query)
         )
-
     candidatos_lista = candidatos_lista.order_by('idUsuario')
-
-   
     paginator = Paginator(candidatos_lista, 10)
     page = request.GET.get('page')
-
     try:
         candidato = paginator.page(page)
     except PageNotAnInteger:
         candidato = paginator.page(1)
     except EmptyPage:
         candidato = paginator.page(paginator.num_pages)
-
     context = {
         'usuario': usuario,
         'nombre_usuario': nombre_usuario,
@@ -420,6 +412,7 @@ def enviar_mensaje_masivo(request):
     return JsonResponse({'ok': False, 'error': 'Método no permitido'})
 
 
+
 def volver_candidato(request):
     if request.method == "POST":
         try:
@@ -428,14 +421,23 @@ def volver_candidato(request):
             
             usuario = Usuario.objects.get(idUsuario=id_usuario)
             
-            usuario.rol_id = 2
-            
-            Candidato.objects.create(usuario=usuario)
+            # Cambiar rol a "candidato" (idRol=2 como ejemplo)
+            rol_candidato = Roles.objects.get(idRol=2)
+            usuario.rol = rol_candidato
             usuario.save()
 
+            # Crear candidato con fecha de finalización
+            Candidato.objects.create(
+                usuario=usuario,
+                fin_postulacion=datetime.now() + timedelta(days=10)
+            )
+
             return JsonResponse({"ok": True, "mensaje": "Usuario convertido en candidato."})
+        
         except Usuario.DoesNotExist:
             return JsonResponse({"ok": False, "error": "Usuario no encontrado."})
+        except Roles.DoesNotExist:
+            return JsonResponse({"ok": False, "error": "Rol de candidato no encontrado."})
         except Exception as e:
             return JsonResponse({"ok": False, "error": f"Error interno: {str(e)}"})
 

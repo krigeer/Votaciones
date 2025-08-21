@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> {{candidato.usuario.nombres_usuario}} {{candidato.usuario.apellidos_usuario}}z - Personera Estudiantil 2025</title>
+    <link rel="stylesheet" href="{% static 'css/votaciones.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="{% static 'css/stilo.css' %}">
+</head>
+<body>
+    <header class="bg-white shadow">
+    <div class="flex items-center justify-between px-6 py-4">
+        <div class="flex-1">
+            <img class="h-8 w-auto" src="{% static 'img/cgti.png' %}" alt="SENA Logo">
+        </div>
+        <div class="flex items-center space-x-4">
+            <div class="relative dropdown">
+                <button class="flex items-center space-x-2 focus:outline-none">
+                    <a href="javascript:history.back()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        Inicio
+                    </a>
+                    <a href="#about" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                         Sobre Mí
+                    </a>
+                    <a href="#proposals" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                         Propuestas
+                    </a>
+                    <div class="border-t border-gray-100"></div>
+                    <a href="#vote" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                     Votar
+                    </a>
+                </button>
+            </div>
+        </div>
+    </div>
+</header>
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-photo">
+                <img src="{{candidato.foto.url}}" alt="foto_candidato">
+            </div>
+            <h1> {{candidato.usuario.nombres_usuario}} {{candidato.usuario.apellidos_usuario}}</h1>
+            <p class="hero-subtitle">Programa: • {{candidato.usuario.Ficha.Programa.nombre}}</p>
+            {% if candidato.vacante %}
+            <p class="hero-subtitle">Candidato a {{candidato.vacante.nombre_postulacion}} </p>
+            {% else %}
+            <p class="hero-subtitle color-red" >Postulación pendiente</p>
+            {% endif %}
+            <a href="#vote" class="cta-button">¡Vota por Mí!</a>
+        </div>
+    </section>
+    <section id="about" class="section about">
+        <div class="container">
+            <h2 class="section-title fade-in">Conoce a {{candidato.usuario.nombres_usuario}}</h2>
+            <div class="about-content">
+                <div class="about-text fade-in">
+                    <h3>¡Hola, soy {{candidato.usuario.nombres_usuario}}!</h3>
+                    {% if candidato.vacante %}
+                    <p>Soy estudiante de {{candidato.usuario.Ficha.Programa.nombre}} en el SENA y me postulo como candidato a {{candidato.vacante.nombre_postulacion}}.</p>
+                    {% else %}
+                    <p>Soy estudiante de {{candidato.usuario.Ficha.Programa.nombre}} en el SENA. Postulación sin definir</p>
+                    {% endif %}
+                    <p></p>
+                </div>
+                <div class="qualities-grid fade-in">
+                    <div class="quality-item">
+                        <span class="quality-icon">🎭</span>
+                        <h4>Responsable</h4>
+                        <p>Cumplo mis compromisos</p>
+                    </div>
+                    <div class="quality-item">
+                        <span class="quality-icon">🤝</span>
+                        <h4>Colaborativa</h4>
+                        <p>Trabajo en equipo</p>
+                    </div>
+                    <div class="quality-item">
+                        <span class="quality-icon">💡</span>
+                        <h4>Creativa</h4>
+                        <p>Busco soluciones innovadoras</p>
+                    </div>
+                    <div class="quality-item">
+                        <span class="quality-icon">📢</span>
+                        <h4>Comunicativa</h4>
+                        <p>Escucho y me expreso bien</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="proposals" class="section proposals">
+        <div class="container">
+            <h2 class="section-title fade-in">Mis Propuestas</h2>
+            <div class="proposals-grid">
+                <div class="proposal-card fade-in">
+                    <span class="proposal-icon">📚</span>
+                    <h3 class="proposal-title">Espacios de Estudio Modernos</h3>
+                    <p class="proposal-description">Crear zonas cómodas con mesas colaborativas, buena iluminación y acceso a tecnología para estudiar y realizar trabajos en grupo de manera efectiva.</p>
+                </div>
+
+                <div class="proposal-card fade-in">
+                    <span class="proposal-icon">🎨</span>
+                    <h3 class="proposal-title">Festival Cultural Mensual</h3>
+                    <p class="proposal-description">Organizar eventos mensuales de arte, música, danza y teatro donde todos puedan participar y mostrar sus talentos, creando una comunidad más unida.</p>
+                </div>
+
+                <div class="proposal-card fade-in">
+                    <span class="proposal-icon">🌱</span>
+                    <h3 class="proposal-title">Colegio Verde</h3>
+                    <p class="proposal-description">Implementar un programa completo de reciclaje, crear un huerto escolar y desarrollar proyectos de conciencia ambiental que involucren a toda la comunidad.</p>
+                </div>
+                <div class="proposal-card fade-in">
+                    <span class="proposal-icon">🏃‍♀️</span>
+                    <h3 class="proposal-title">Deportes Inclusivos</h3>
+                    <p class="proposal-description">Crear equipos deportivos para todos los niveles, organizar torneos internos y garantizar que cada estudiante pueda participar en la actividad física que más le guste.</p>
+                </div>
+
+                <div class="proposal-card fade-in">
+                    <span class="proposal-icon">🗣️</span>
+                    <h3 class="proposal-title">Tu Voz Cuenta</h3>
+                    <p class="proposal-description">Establecer un sistema digital de sugerencias y crear asambleas estudiantiles mensuales donde todos puedan expresar sus ideas y propuestas.</p>
+                </div>
+
+                <div class="proposal-card fade-in">
+                    <span class="proposal-icon">🎉</span>
+                    <h3 class="proposal-title">Eventos Memorables</h3>
+                    <p class="proposal-description">Organizar actividades especiales como festivales gastronómicos, obras de teatro estudiantiles y competencias académicas que hagan nuestra experiencia escolar única.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="vote" class="section vote-section">
+        <div class="container">
+            <div class="vote-content fade-in">
+                <h2>¡Es hora de votar!</h2>
+                <p>Tu voto es tu voz. Juntos podemos transformar nuestro colegio en un lugar más divertido, inclusivo y lleno de oportunidades para crecer y aprender.</p>
+                <button class="vote-button" onclick="showVoteConfirmation()">
+                    🗳️ Votar por {{candidato.usuario.nombres_usuario}}
+                </button>
+            </div>
+        </div>
+    </section>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p> {{candidato.usuario.nombres_usuario}} - Candidat@ a {{candidato.vacante.nombre_postulacion}}l</p>
+            <p>&copy; 2025 SENA - Sistema Electoral. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+    <script>
+       
+        function toggleMenu() {
+            const navMenu = document.getElementById('navMenu');
+            navMenu.classList.toggle('active');
+        }
+
+        
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navMenu').classList.remove('active');
+            });
+        });
+
+        
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+    
+
+        
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(76, 175, 80, 0.95)';
+            } else {
+                navbar.style.background = 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)';
+            }
+        });
+    </script>
+</body>
+</html>

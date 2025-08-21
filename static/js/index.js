@@ -21,6 +21,7 @@ function fechaVotacion() {
             }).then(response => response.json())
                 .then(data => {
                     if (!data.success) throw new Error(data.error || "Error al guardar");
+                       
                 }).then(() => {
                     Swal.fire("Guardado", "El votante ha sido añadido.", "success").then(() => location.reload());
                 }).catch(error => {

@@ -11,11 +11,8 @@ def votante_view(request):
     user_id = request.session.get('user_id')
     usuario = Usuario.objects.get(idUsuario=user_id)
     nombre_usuario = request.session.get('NombreUsuario')
-
-    # Obtener término de búsqueda desde GET
     query = request.GET.get('q', '')
 
-    # Filtrar candidatos por nombre del usuario
     candidatos = Candidato.objects.select_related('usuario').prefetch_related('propuesta_set')
     if query:
         candidatos = candidatos.filter(
@@ -24,7 +21,7 @@ def votante_view(request):
         )
 
     # Paginación
-    paginator = Paginator(candidatos, 5)  # 5 candidatos por página
+    paginator = Paginator(candidatos, 5) 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -36,3 +33,5 @@ def votante_view(request):
         'query': query,
     }
     return render(request, 'appVotante/panel_votante.html', context)
+
+

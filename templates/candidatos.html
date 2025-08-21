@@ -55,19 +55,22 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Título de sección -->
             <div class="text-center mb-8">
                 <h2 class="text-3xl font-bold text-gray-800 mb-2">Candidatos Registrados</h2>
                 <p class="text-gray-600">Conoce a los candidatos y sus propuestas para las próximas elecciones</p>
             </div>
-
             <!-- Grid de Candidatos -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {% for candidato in page_obj %}
             <div class="bg-white overflow-hidden shadow rounded-lg transition-all duration-300 card-hover">
                 <div class="relative pb-48">
-                    <img class="absolute h-full w-full object-cover" src="{{candidato.foto}}" alt="Foto de candidato">
+                     {% if candidato.foto %}
+                    <img class="absolute h-full w-full object-cover" src="{{candidato.foto_url}}"
+                        alt="{{candiato.nombres_usuario}}">
+                    {% else %}
+                    <img src="{% static 'img/default-user.png' %}" alt="Sin foto"
+                        class="absolute h-full w-full object-cover">
+                    {% endif %}
                 </div>
                 <div class="p-6">
                     <div class="flex items-baseline">

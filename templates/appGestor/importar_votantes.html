@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     {% load static %}
     <meta charset="UTF-8">
@@ -30,16 +29,12 @@
         }
     </script>
 </head>
-
 <body class="bg-gray-100 min-h-screen flex flex-col md:flex-row">
     <!-- Sidebar -->
     {% include 'components/menu.html' %}
-
-    <!-- Main Content -->
     <div class="flex-1 overflow-x-hidden overflow-y-auto">
         <!-- Top Navigation -->
         {% include 'components/header.html' %}
-
         <!-- Main Content -->
         <main class="p-6">
             <!-- Stats Overview -->
@@ -64,8 +59,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Registered Voters -->
                 <div class="bg-white rounded-lg shadow-sm p-6 card">
                     <div class="flex items-center">
                         <div class="p-3 rounded-full bg-blue-100 mr-4">
@@ -85,8 +78,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Active Votes -->
                 <div class="bg-white rounded-lg shadow-sm p-6 card">
                     <div class="flex items-center">
                         <div class="p-3 rounded-full bg-purple-100 mr-4">
@@ -106,15 +97,12 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Time Remaining -->
                 <div class="bg-white rounded-lg shadow-sm p-6 card">
                     <div class="flex items-center">
                         <div class="p-3 rounded-full bg-yellow-100 mr-4">
                             <i class="fas fa-clock text-yellow-500 text-xl"></i>
                         </div>
                         <div>
-
                             <p class="text-sm font-medium text-gray-600">Tiempo Restante</p>
                             <p class="text-2xl font-bold text-gray-900">{{tiempo_restante}}</p>
                         </div>
@@ -129,10 +117,7 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Charts & Tables Section -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                <!-- Voting Progress -->
                 <div class="bg-white rounded-lg shadow-sm p-6">
                     
                     <h2 class="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
@@ -178,7 +163,6 @@
                             </div>
                         </div>
                         <input type="hidden" name="action" value="upload_users">
-
                         <div class="mt-8">
                             <button type="submit" 
                                     id="upload-btn" 
@@ -228,7 +212,6 @@
                         </div>
                         {% endif %}
                     </form>
-
                     <div id="loading-overlay" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                         <div class="bg-white rounded-lg p-8 max-w-sm mx-4">
                             <div class="text-center">
@@ -238,11 +221,8 @@
                             </div>
                         </div>
                     </div>
-                
-
                 </div>
-
-                <!-- Candidates Ranking -->
+                <!-- Instrucciones -->
                 <div class="bg-white rounded-lg shadow-sm p-6">
                     <h2 class="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
                         <i class="fas fa-info-circle text-primary mr-3"></i>
@@ -335,7 +315,6 @@
                                 </tbody>
                             </table>
                         </div>
-                        
                         <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4 overflow-x-auto">
                             <table class="w-full text-xs">
                                 <thead>
@@ -381,210 +360,8 @@
 
                 </div>
             </div>
-
-            <!-- Recent Activities & Candidates -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Recent Activities -->
-                <div class="lg:col-span-2 bg-white rounded-lg shadow-sm p-6">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-semibold text-gray-800">Actividades Recientes</h3>
-                        <a href="#" class="text-sm font-medium text-green-600 hover:text-green-800">Ver todas</a>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full">
-                            <thead>
-                                <tr class="bg-gray-50">
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Usuario</th>
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Acción</th>
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Fecha</th>
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Estado</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div
-                                                class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
-                                                <i class="fas fa-user text-gray-500"></i>
-                                            </div>
-                                            <div class="ml-3">
-                                                <p class="text-sm font-medium text-gray-900">Juan Pérez</p>
-                                                <p class="text-xs text-gray-500">Estudiante</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <p class="text-sm text-gray-900">Voto registrado</p>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <p class="text-sm text-gray-500">Hoy, 10:23 AM</p>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span
-                                            class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                                            Completado
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div
-                                                class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
-                                                <i class="fas fa-user text-gray-500"></i>
-                                            </div>
-                                            <div class="ml-3">
-                                                <p class="text-sm font-medium text-gray-900">María González</p>
-                                                <p class="text-xs text-gray-500">Docente</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <p class="text-sm text-gray-900">Voto registrado</p>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <p class="text-sm text-gray-500">Hoy, 9:45 AM</p>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span
-                                            class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                                            Completado
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div
-                                                class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
-                                                <i class="fas fa-user text-gray-500"></i>
-                                            </div>
-                                            <div class="ml-3">
-                                                <p class="text-sm font-medium text-gray-900">Carlos Rodríguez</p>
-                                                <p class="text-xs text-gray-500">Administrativo</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <p class="text-sm text-gray-900">Intento fallido</p>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <p class="text-sm text-gray-500">Hoy, 9:30 AM</p>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span
-                                            class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
-                                            Error
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div
-                                                class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
-                                                <i class="fas fa-user text-gray-500"></i>
-                                            </div>
-                                            <div class="ml-3">
-                                                <p class="text-sm font-medium text-gray-900">Ana Martínez</p>
-                                                <p class="text-xs text-gray-500">Estudiante</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <p class="text-sm text-gray-900">Registro actualizado</p>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <p class="text-sm text-gray-500">Ayer, 3:15 PM</p>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span
-                                            class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
-                                            Actualizado
-                                        </span>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Top Candidates -->
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-semibold text-gray-800">Candidatos Destacados</h3>
-                        <a href="#" class="text-sm font-medium text-green-600 hover:text-green-800">Ver todos</a>
-                    </div>
-                    <div class="space-y-4">
-                        <div class="flex items-center p-3 bg-gray-50 rounded-lg">
-                            <img class="h-12 w-12 rounded-full" src="/api/placeholder/120/120" alt="Candidato">
-                            <div class="ml-3">
-                                <p class="text-sm font-medium text-gray-900">Laura Valencia</p>
-                                <p class="text-xs text-gray-500">Representante Estudiantil</p>
-                                <div class="flex items-center mt-1">
-                                    <div class="w-24 h-1.5 bg-gray-200 rounded overflow-hidden">
-                                        <div class="bg-green-500 h-1.5 rounded" style="width: 75%"></div>
-                                    </div>
-                                    <p class="text-xs font-medium text-gray-500 ml-2">75%</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex items-center p-3 bg-gray-50 rounded-lg">
-                            <img class="h-12 w-12 rounded-full" src="/api/placeholder/120/120" alt="Candidato">
-                            <div class="ml-3">
-                                <p class="text-sm font-medium text-gray-900">Miguel Sánchez</p>
-                                <p class="text-xs text-gray-500">Representante Estudiantil</p>
-                                <div class="flex items-center mt-1">
-                                    <div class="w-24 h-1.5 bg-gray-200 rounded overflow-hidden">
-                                        <div class="bg-green-500 h-1.5 rounded" style="width: 60%"></div>
-                                    </div>
-                                    <p class="text-xs font-medium text-gray-500 ml-2">60%</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex items-center p-3 bg-gray-50 rounded-lg">
-                            <img class="h-12 w-12 rounded-full" src="/api/placeholder/120/120" alt="Candidato">
-                            <div class="ml-3">
-                                <p class="text-sm font-medium text-gray-900">Patricia Gómez</p>
-                                <p class="text-xs text-gray-500">Representante Docente</p>
-                                <div class="flex items-center mt-1">
-                                    <div class="w-24 h-1.5 bg-gray-200 rounded overflow-hidden">
-                                        <div class="bg-green-500 h-1.5 rounded" style="width: 45%"></div>
-                                    </div>
-                                    <p class="text-xs font-medium text-gray-500 ml-2">45%</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex items-center p-3 bg-gray-50 rounded-lg">
-                            <img class="h-12 w-12 rounded-full" src="/api/placeholder/120/120" alt="Candidato">
-                            <div class="ml-3">
-                                <p class="text-sm font-medium text-gray-900">Roberto Jiménez</p>
-                                <p class="text-xs text-gray-500">Representante Administrativo</p>
-                                <div class="flex items-center mt-1">
-                                    <div class="w-24 h-1.5 bg-gray-200 rounded overflow-hidden">
-                                        <div class="bg-green-500 h-1.5 rounded" style="width: 30%"></div>
-                                    </div>
-                                    <p class="text-xs font-medium text-gray-500 ml-2">30%</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- Footer -->
-            <footer class="mt-8 text-center pb-6">
-                <p class="text-sm text-gray-500">© 2025 SENA - Sistema Electoral. Todos los derechos reservados.</p>
-            </footer>
+            {% include 'components/footer.html' %}
         </main>
     </div>
 
@@ -676,8 +453,6 @@
                 fileInput.dispatchEvent(event);
             }
         });
-
-    
         window.addEventListener('load', function() {
             loadingOverlay.classList.add('hidden');
         });
