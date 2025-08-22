@@ -17,7 +17,6 @@
     </script>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col md:flex-row">
-    <!-- Sidebar -->
     {% include 'components/menu.html' %}
     <div class="flex-1 overflow-x-hidden overflow-y-auto">
         {% include 'components/header.html' %}
@@ -49,7 +48,6 @@
                         <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-r">Buscar</button>
                     </form>
                 </div>
-                <!-- Grid de Candidatos -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {% for candidato in candidato %}
                     <div
@@ -114,7 +112,6 @@
                     </a>
                     {% endif %}
                 </div>
-
         </main>
         <!-- Footer -->
         {% include 'components/footer.html' %}

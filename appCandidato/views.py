@@ -23,7 +23,7 @@ def candidato(request):
             Q(usuario__apellidos_usuario__icontains=query)
         )
 
-    paginator = Paginator(candidatos, 5)  # 5 candidatos por página
+    paginator = Paginator(candidatos, 5)  # 5 candidatos 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -69,11 +69,11 @@ def registro_informacion(request):
             
         elif form_type == 'form_propuesta':
                 print("Formulario de propuesta recibido")
-                form_propuesta = ActualizarPropuesta(request.POST, request.FILES)  # 👈 sin instance=candidato
+                form_propuesta = ActualizarPropuesta(request.POST, request.FILES) 
                 if form_propuesta.is_valid():
-                    propuesta = form_propuesta.save(commit=False)  # 👈 aún no guarda
-                    propuesta.candidato = candidato  # 👈 se asocia al candidato logueado
-                    propuesta.save()  # 👈 ahora sí guarda en la BD
+                    propuesta = form_propuesta.save(commit=False)  
+                    propuesta.candidato = candidato  
+                    propuesta.save()  
                     print("Propuesta guardada:", propuesta.titulo)
                     return JsonResponse({"success": True, "mensaje": "Propuesta registrada correctamente."})
                 else:

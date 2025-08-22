@@ -96,7 +96,7 @@ function enviarMensajeMasivo() {
                     html: 'Por favor espera mientras se envían los correos',
                     allowOutsideClick: false,
                     didOpen: () => {
-                        Swal.showLoading(); // Muestra el spinner
+                        Swal.showLoading(); //  spinner
                     }
                 });
 
@@ -113,7 +113,7 @@ function enviarMensajeMasivo() {
                     return response.json();
                 })
                 .then(data => {
-                    Swal.close(); // Cierra el "enviando..."
+                    Swal.close(); // Cierra "enviando"
 
                     if (data.ok) {
                         let detalleFallidos = "";

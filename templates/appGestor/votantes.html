@@ -20,14 +20,9 @@
 </head>
 
 <body class="bg-gray-100 min-h-screen flex flex-col md:flex-row">
-    <!-- Sidebar -->
     {% include 'components/menu.html' %}
-
-
     <div class="flex-1 overflow-x-hidden overflow-y-auto">
-        <!-- Header -->
         {% include 'components/header.html' %}
-        <!-- Contenido Principal -->
         <main class="p-6">
             <div class="mb-8 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
                 <div class="flex">
@@ -46,7 +41,6 @@
                 </div>
             </div>
             <div class="container mx-auto px-4">
-                <!-- Título de sección -->
                 <div class="text-center mb-8">
                     <h2 class="text-3xl font-bold text-gray-800 mb-2">Votantes Registrados</h2>
                 </div>
@@ -58,10 +52,7 @@
                     </form>
 
                 </div>
-
-                <!-- Grid de Candidatos -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    <!-- Candidato 1 -->
                     {% for votante in votantes %}
                     <div
                         class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
@@ -97,7 +88,6 @@
                         </div>
                     </div>
                     {% endfor %}
-
                 </div>
                <div class="flex justify-center mt-4 space-x-4">
                     {% if votantes.has_previous %}
@@ -125,7 +115,6 @@
                     </a>
                     {% endif %}
                 </div>
-
         </main>
         <!-- Footer -->
         {% include 'components/footer.html' %}

@@ -30,16 +30,11 @@
     </script>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col md:flex-row">
-    <!-- Sidebar -->
     {% include 'components/menu.html' %}
     <div class="flex-1 overflow-x-hidden overflow-y-auto">
-        <!-- Top Navigation -->
         {% include 'components/header.html' %}
-        <!-- Main Content -->
         <main class="p-6">
-            <!-- Stats Overview -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-                <!-- Total Candidates -->
                 <div class="bg-white rounded-lg shadow-sm p-6 card">
                     <div class="flex items-center">
                         <div class="p-3 rounded-full bg-green-100 mr-4">
@@ -222,7 +217,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Instrucciones -->
                 <div class="bg-white rounded-lg shadow-sm p-6">
                     <h2 class="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
                         <i class="fas fa-info-circle text-primary mr-3"></i>
@@ -357,7 +351,6 @@
                             <li>• El archivo no debe superar los 10MB</li>
                         </ul>
                     </div>
-
                 </div>
             </div>
             <!-- Footer -->
@@ -372,10 +365,7 @@
         const uploadForm = document.getElementById('upload-form');
         const loadingOverlay = document.getElementById('loading-overlay');
         const dropZone = document.getElementById('drop-zone');
-
-    
         fileInput.addEventListener('change', handleFileSelect);
-
         function handleFileSelect(event) {
             const file = event.target.files[0];
             if (file) {
