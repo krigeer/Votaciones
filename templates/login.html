@@ -10,6 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="shortcut icon" href="{% static 'img/cgti.png' %}" type="image/x-icon">
 </head>
+
 <body class="bg-gray-100 h-screen">
     <nav class="bg-white shadow-sm fixed w-full z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -17,14 +18,12 @@
                 <div class="flex">
                     <div class="flex-shrink-0 flex items-center">
                         <img class="h-8 w-auto" src="{% static 'img/cgti.png' %}" alt="SENA Logo">
-                        <span class="ml-2 text-xl font-bold text-gray-800">SENA Electoral</span>
+                        <span class="ml-2 text-xl font-bold text-gray-800">SENA ELECTORAL</span>
                     </div>
                 </div>
                 <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
                     <a href="{% url 'inicio' %}"
                         class="nav-link text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">Inicio</a>
-                    <a href="{% url 'todos_candidatos' %}"
-                        class="nav-link text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">Candidatos</a>
                 </div>
                 <div class="flex items-center">
                     <a href="{% url 'login' %}"
@@ -58,7 +57,7 @@
         </div>
     </nav>
     <div class="login-container flex h-screen mb-2">
-        <div class="hidden lg:flex lg:w-1/2 bg-cover bg-center relative" style="background-image: url('/api/placeholder/960/1080');">
+        <div class="hidden lg:flex lg:w-1/2 bg-cover bg-center relative" style="background-image: url('');">
             <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center px-10">
                 <img src="{% static 'img/cgti.png' %}" alt="Logo SENA" class="mb-8">
                 <h1 class="text-white text-4xl font-bold mb-4">Sistema Electoral SENA</h1>

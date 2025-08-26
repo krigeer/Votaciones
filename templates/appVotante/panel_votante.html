@@ -5,30 +5,15 @@
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>SENA - Sistema Electoral | Votantes</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
         integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+
     <link rel="shortcut icon" href="{% static 'img/cgti.png' %}" type="image/x-icon">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="{% static 'css/stilo.css' %}">
-    <script src="{% static 'js/index.js' %}"></script>
-    <style>
-        .sena-green {
-            background-color: #39A900;
-        }
-
-        .sena-button:hover {
-            background-color: #2E8A00;
-        }
-
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-    </style>
 </head>
 
 <body class="bg-gray-100 min-h-screen">
@@ -40,11 +25,12 @@
                 <div class="flex">
                     <div class="relative rounded-md shadow-sm mr-4">
                         <form action="" method="get">
-                        <input type="text" name="q" placeholder="Buscar candidato..." value="{{ query }}"
-                            class="focus:ring-green-500 focus:border-green-500 block w-full pl-10 pr-12 py-2 sm:text-sm border-gray-300 rounded-md">
-                        <button type="submit" class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-search text-gray-400"></i>
-                        </button>
+                            <input type="text" name="q" placeholder="Buscar candidato..." value="{{ query }}"
+                                class="focus:ring-green-500 focus:border-green-500 block w-full pl-10 pr-12 py-2 sm:text-sm border-gray-300 rounded-md">
+                            <button type="submit"
+                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-search text-gray-400"></i>
+                            </button>
                         </form>
                     </div>
                     <div>
@@ -57,7 +43,7 @@
             {% for candidato in page_obj %}
             <div class="bg-white overflow-hidden shadow rounded-lg transition-all duration-300 card-hover">
                 <div class="relative pb-48">
-                     {% if candidato.foto %}
+                    {% if candidato.foto %}
                     <img class="absolute h-full w-full object-cover" src="{{candidato.foto_url}}"
                         alt="{{candiato.nombres_usuario}}">
                     {% else %}
@@ -103,38 +89,38 @@
         </div>
         <!-- Paginación -->
         <div class="mt-10 flex justify-center">
-    <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
 
-        {% if page_obj.has_previous %}
-            <a href="?q={{ query }}&page={{ page_obj.previous_page_number }}"
-                class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                <span class="sr-only">Anterior</span> <i class="fas fa-chevron-left"></i>
-            </a>
+                {% if page_obj.has_previous %}
+                <a href="?q={{ query }}&page={{ page_obj.previous_page_number }}"
+                    class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                    <span class="sr-only">Anterior</span> <i class="fas fa-chevron-left"></i>
+                </a>
 
-            <a href="?q={{ query }}&page=1"
-                class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-green-500 text-sm font-medium text-white">
-                1
-            </a>
-        {% endif %}
+                <a href="?q={{ query }}&page=1"
+                    class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-green-500 text-sm font-medium text-white">
+                    1
+                </a>
+                {% endif %}
 
-        {% if page_obj.has_next %}
-        
-            <a href="?q={{ query }}&page={{ page_obj.paginator.num_pages }}"
-                class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
-                {{ page_obj.paginator.num_pages }}
-            </a>
+                {% if page_obj.has_next %}
 
-            <a href="?q={{ query }}&page={{ page_obj.next_page_number }}"
-                class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                <span class="sr-only">Siguiente</span>
-                <i class="fas fa-chevron-right"></i>
-            </a>
-        {% endif %}
+                <a href="?q={{ query }}&page={{ page_obj.paginator.num_pages }}"
+                    class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                    {{ page_obj.paginator.num_pages }}
+                </a>
 
-    </nav>
-</div>
+                <a href="?q={{ query }}&page={{ page_obj.next_page_number }}"
+                    class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                    <span class="sr-only">Siguiente</span>
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+                {% endif %}
 
-<span>Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+            </nav>
+        </div>
+
+        <span>Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
     </main>
     <!-- Footer -->
     {% include 'components/footer.html' %}

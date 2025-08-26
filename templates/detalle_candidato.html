@@ -1,166 +1,284 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> {{candidato.usuario.nombres_usuario}} {{candidato.usuario.apellidos_usuario}}z - Personera Estudiantil 2025</title>
-    <link rel="stylesheet" href="{% static 'css/votaciones.css' %}">
+    <title>{{candidato.usuario.nombres_usuario}} {{candidato.usuario.apellidos_usuario}} - Personera Estudiantil 2025</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="{% static 'css/stilo.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/form_candidatos.css' %}">
 </head>
-<body>
-    <header class="bg-white shadow">
-    <div class="flex items-center justify-between px-6 py-4">
-        <div class="flex-1">
-            <img class="h-8 w-auto" src="{% static 'img/cgti.png' %}" alt="SENA Logo">
-        </div>
-        <div class="flex items-center space-x-4">
-            <div class="relative dropdown">
-                <button class="flex items-center space-x-2 focus:outline-none">
-                    <a href="javascript:history.back()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                        Inicio
-                    </a>
-                    <a href="#about" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                         Sobre Mí
-                    </a>
-                    <a href="#proposals" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                         Propuestas
-                    </a>
-                    <div class="border-t border-gray-100"></div>
-                    <a href="#vote" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
-                     Votar
-                    </a>
+
+<body class="bg-gray-50 text-gray-800">
+    <!-- Header -->
+    <header class="bg-white shadow-lg fixed w-full top-0 z-50">
+        <nav class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <img class="h-10 w-auto" src="{% static 'img/cgti.png' %}" alt="SENA Logo">
+                    <span class="text-xl font-semibold text-gray-800">SENA ELECTORAL</span>
+                </div>
+                
+                <!-- Desktop  -->
+                <div class="nav-desktop hidden md:flex items-center space-x-6">
+                    <a href="javascript:window.history.back()" class="text-gray-700 hover:text-green-600 transition-colors font-medium">Inicio</a>
+                    <a href="#about" class="text-gray-700 hover:text-green-600 transition-colors font-medium">Sobre Mí</a>
+                    <a href="#proposals" class="text-gray-700 hover:text-green-600 transition-colors font-medium">Propuestas</a>
+                    <a href="#vote" class="bg-gradient-to-r from-green-400 to-green-800 text-white px-6 py-2 rounded-full hover:shadow-lg transition-all">Votar</a>
+                </div>
+                
+                <!-- Mobile  -->
+                <button class="nav-mobile md:hidden" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars text-2xl text-gray-700"></i>
                 </button>
+            </div>
+        </nav>
+        
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="mobile-menu fixed top-0 right-0 h-full w-64 bg-white shadow-xl z-50">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-8">
+                    <span class="text-lg font-semibold">Menú</span>
+                    <button onclick="toggleMobileMenu()">
+                        <i class="fas fa-times text-xl text-gray-600"></i>
+                    </button>
+                </div>
+                <nav class="space-y-4">
+                    <a href="#home" class="block py-3 text-gray-700 hover:text-green-600 transition-colors">Inicio</a>
+                    <a href="#about" class="block py-3 text-gray-700 hover:text-green-600 transition-colors">Sobre Mí</a>
+                    <a href="#proposals" class="block py-3 text-gray-700 hover:text-green-600 transition-colors">Propuestas</a>
+                    <a href="#vote" class="block py-3 text-green-600 font-semibold">Votar</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero  -->
+    <section id="home" class="hero-gradient min-h-screen flex items-center justify-center relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-white rounded-full blur-3xl"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+        </div>
+        
+        <div class="hero-content container mx-auto px-4 text-center text-white relative z-10">
+            <div class="mb-8">
+                <div class="w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden border-4 border-white shadow-2xl">
+                    <img src="{{candidato.foto.url}}" alt="{{candidato.usuario.nombres_usuario}}" class="w-full h-full object-cover">
+                </div>
+                <h1 class="text-4xl md:text-6xl font-bold mb-4">
+                    {{candidato.usuario.nombres_usuario}} {{candidato.usuario.apellidos_usuario}}
+                </h1>
+                <p class="text-xl md:text-2xl mb-2 opacity-90">
+                    {{candidato.usuario.Ficha.Programa.nombre}}
+                </p>
+                {% if candidato.vacante %}
+                <p class="text-lg md:text-xl mb-8 opacity-80">
+                    Candidato a {{candidato.vacante.nombre_postulacion}}
+                </p>
+                {% else %}
+                <p class="text-lg md:text-xl mb-8 text-yellow-300">
+                    Postulación pendiente
+                </p>
+                {% endif %}
+            </div>
+            
+            <a href="#vote" class="inline-block bg-white text-green-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-gray-100 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105">
+                <i class="fas fa-vote-yea mr-2"></i>
+                ¡Vota por Mí!
+            </a>
+        </div>
+    </section>
+
+   
+    <section id="about" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-16 text-gray-800 fade-in">
+                Conoce a {{candidato.usuario.nombres_usuario}}
+            </h2>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-gradient-to-br from-green-50 to-blue-50 rounded-2xl p-8 md:p-12 mb-12 fade-in">
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-800">
+                        ¡Hola, soy {{candidato.usuario.nombres_usuario}}!
+                    </h3>
+                    {% if candidato.vacante %}
+                    <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                        Soy estudiante de {{candidato.usuario.Ficha.Programa.nombre}} en el SENA y me postulo como
+                        candidato a {{candidato.vacante.nombre_postulacion}}.
+                    </p>
+                    {% else %}
+                    <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                        Soy estudiante de {{candidato.usuario.Ficha.Programa.nombre}} en el SENA. Postulación sin definir
+                    </p>
+                    {% endif %}
+                    <p class="text-lg text-gray-700 leading-relaxed">
+                        Mi compromiso es trabajar por una institución más inclusiva, participativa y orientada al desarrollo integral de todos los estudiantes.
+                    </p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 fade-in">
+                    {% for cualidad in cualidades %}
+                    <div class="bg-white rounded-xl p-6 shadow-lg card-hover border border-gray-100">
+                        <div class="text-4xl mb-4">{{ cualidad.emoji }}</div>
+                        <h4 class="text-xl font-semibold mb-3 text-gray-800">{{ cualidad.nombre_cualidad }}</h4>
+                        <p class="text-gray-600">{{ cualidad.descripcion|default:cualidad.nombre_cualidad }}</p>
+                    </div>
+                    {% empty %}
+                    <div class="bg-white rounded-xl p-6 shadow-lg card-hover border border-gray-100">
+                        <div class="text-4xl mb-4">📢</div>
+                        <h4 class="text-xl font-semibold mb-3 text-gray-800">Responsable</h4>
+                        <p class="text-gray-600">Me comprometo en cumplir mis objetivos</p>
+                    </div>
+                    <div class="bg-white rounded-xl p-6 shadow-lg card-hover border border-gray-100">
+                        <div class="text-4xl mb-4">🤝</div>
+                        <h4 class="text-xl font-semibold mb-3 text-gray-800">Colaborativo</h4>
+                        <p class="text-gray-600">Trabajo en equipo para lograr mejores resultados</p>
+                    </div>
+                    <div class="bg-white rounded-xl p-6 shadow-lg card-hover border border-gray-100">
+                        <div class="text-4xl mb-4">💡</div>
+                        <h4 class="text-xl font-semibold mb-3 text-gray-800">Innovador</h4>
+                        <p class="text-gray-600">Propongo soluciones creativas y efectivas</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <section id="proposals" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-16 text-gray-800 fade-in">
+                Mis Propuestas
+            </h2>
+            
+            <div class="max-w-6xl mx-auto">
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {% for propuesta in propuestas %}
+                    <div class="bg-white rounded-xl overflow-hidden shadow-lg card-hover border border-gray-100 fade-in">
+                        <div class="p-6">
+                            <div class="text-4xl mb-4">{{ propuesta.emoji }}</div>
+                            <h3 class="text-xl font-semibold mb-3 text-gray-800">{{ propuesta.titulo }}</h3>
+                            <p class="text-gray-600 mb-4">{{ propuesta.descripcion }}</p>
+                            
+                            {% if propuesta.video_url %}
+                            <button onclick="openProposalModal('{{ propuesta.id }}')" 
+                                    class="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white py-2 px-4 rounded-lg hover:shadow-lg transition-all mb-2">
+                                <i class="fas fa-play mr-2"></i>
+                                Ver Video Explicativo
+                            </button>
+                            {% endif %}
+                            
+                            {% if propuesta.descripcion_completa %}
+                            <button onclick="openProposalDetails('{{ propuesta.id }}')" 
+                                    class="w-full border border-green-600 text-green-600 py-2 px-4 rounded-lg hover:bg-green-50 transition-all">
+                                <i class="fas fa-info-circle mr-2"></i>
+                                Ver Detalles
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100 fade-in col-span-full">
+                        <div class="p-8 text-center">
+                            <div class="text-6xl mb-4">📋</div>
+                            <h3 class="text-2xl font-semibold mb-3 text-gray-800">Propuestas en desarrollo</h3>
+                            <p class="text-gray-600">Las propuestas detalladas se publicarán próximamente. ¡Mantente atento!</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <section id="vote" class="py-20 gradient-bg">
+        <div class="container mx-auto px-4 text-center">
+            <div class="max-w-4xl mx-auto text-white fade-in">
+                <h2 class="text-4xl font-bold mb-8">¡Es hora de votar!</h2>
+                <p class="text-xl mb-12 opacity-90 leading-relaxed">
+                    Tu voto es tu voz. Juntos podemos transformar nuestra institución en un lugar más inclusivo, 
+                    participativo y lleno de oportunidades para crecer y aprender.
+                </p>
+                
+                <div class="bg-white rounded-2xl p-8 glass-effect text-gray-800 mb-8">
+                    <h3 class="text-2xl font-semibold mb-4">¿Por qué votar por mí?</h3>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="text-center">
+                            <div class="text-3xl mb-2">🎯</div>
+                            <h4 class="font-semibold">Comprometido</h4>
+                            <p class="text-sm">Con el cambio real</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl mb-2">👥</div>
+                            <h4 class="font-semibold">Representativo</h4>
+                            <p class="text-sm">De todos los estudiantes</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl mb-2">✨</div>
+                            <h4 class="font-semibold">Innovador</h4>
+                            <p class="text-sm">En propuestas y soluciones</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <button onclick="showVoteConfirmation()" 
+                        class="bg-white text-green-600 px-10 py-4 rounded-full font-bold text-xl hover:bg-gray-100 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105">
+                    <i class="fas fa-vote-yea mr-3"></i>
+                    Votar por {{candidato.usuario.nombres_usuario}}
+                </button>
+            </div>
+        </div>
+    </section>
+
+    
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4 text-center">
+            <div class="mb-6">
+                <h4 class="text-2xl font-semibold mb-2">
+                    {{candidato.usuario.nombres_usuario}} {{candidato.usuario.apellidos_usuario}}
+                </h4>
+                {% if candidato.vacante %}
+                <p class="text-gray-400">Candidato a {{candidato.vacante.nombre_postulacion}}</p>
+                {% endif %}
+            </div>
+            <div class="border-t border-gray-700 pt-6">
+                <p class="text-gray-400">&copy; 2025 SENA - Sistema Electoral. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    
+    <div id="proposalModal" class="proposal-modal">
+        <div class="proposal-modal-content">
+            <div class="flex justify-between items-center p-6 border-b">
+                <h3 id="modalTitle" class="text-2xl font-semibold"></h3>
+                <button onclick="closeProposalModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div id="modalContent" class="p-6">
+                
             </div>
         </div>
     </div>
-</header>
-    <section id="home" class="hero">
-        <div class="hero-container">
-            <div class="hero-photo">
-                <img src="{{candidato.foto.url}}" alt="foto_candidato">
-            </div>
-            <h1> {{candidato.usuario.nombres_usuario}} {{candidato.usuario.apellidos_usuario}}</h1>
-            <p class="hero-subtitle">Programa: • {{candidato.usuario.Ficha.Programa.nombre}}</p>
-            {% if candidato.vacante %}
-            <p class="hero-subtitle">Candidato a {{candidato.vacante.nombre_postulacion}} </p>
-            {% else %}
-            <p class="hero-subtitle color-red" >Postulación pendiente</p>
-            {% endif %}
-            <a href="#vote" class="cta-button">¡Vota por Mí!</a>
-        </div>
-    </section>
-    <section id="about" class="section about">
-        <div class="container">
-            <h2 class="section-title fade-in">Conoce a {{candidato.usuario.nombres_usuario}}</h2>
-            <div class="about-content">
-                <div class="about-text fade-in">
-                    <h3>¡Hola, soy {{candidato.usuario.nombres_usuario}}!</h3>
-                    {% if candidato.vacante %}
-                    <p>Soy estudiante de {{candidato.usuario.Ficha.Programa.nombre}} en el SENA y me postulo como candidato a {{candidato.vacante.nombre_postulacion}}.</p>
-                    {% else %}
-                    <p>Soy estudiante de {{candidato.usuario.Ficha.Programa.nombre}} en el SENA. Postulación sin definir</p>
-                    {% endif %}
-                    <p></p>
-                </div>
-                <div class="qualities-grid fade-in">
-                    <div class="quality-item">
-                        <span class="quality-icon">🎭</span>
-                        <h4>Responsable</h4>
-                        <p>Cumplo mis compromisos</p>
-                    </div>
-                    <div class="quality-item">
-                        <span class="quality-icon">🤝</span>
-                        <h4>Colaborativa</h4>
-                        <p>Trabajo en equipo</p>
-                    </div>
-                    <div class="quality-item">
-                        <span class="quality-icon">💡</span>
-                        <h4>Creativa</h4>
-                        <p>Busco soluciones innovadoras</p>
-                    </div>
-                    <div class="quality-item">
-                        <span class="quality-icon">📢</span>
-                        <h4>Comunicativa</h4>
-                        <p>Escucho y me expreso bien</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section id="proposals" class="section proposals">
-        <div class="container">
-            <h2 class="section-title fade-in">Mis Propuestas</h2>
-            <div class="proposals-grid">
-                <div class="proposal-card fade-in">
-                    <span class="proposal-icon">📚</span>
-                    <h3 class="proposal-title">Espacios de Estudio Modernos</h3>
-                    <p class="proposal-description">Crear zonas cómodas con mesas colaborativas, buena iluminación y acceso a tecnología para estudiar y realizar trabajos en grupo de manera efectiva.</p>
-                </div>
-                <div class="proposal-card fade-in">
-                    <span class="proposal-icon">🎨</span>
-                    <h3 class="proposal-title">Festival Cultural Mensual</h3>
-                    <p class="proposal-description">Organizar eventos mensuales de arte, música, danza y teatro donde todos puedan participar y mostrar sus talentos, creando una comunidad más unida.</p>
-                </div>
-                <div class="proposal-card fade-in">
-                    <span class="proposal-icon">🌱</span>
-                    <h3 class="proposal-title">Colegio Verde</h3>
-                    <p class="proposal-description">Implementar un programa completo de reciclaje, crear un huerto escolar y desarrollar proyectos de conciencia ambiental que involucren a toda la comunidad.</p>
-                </div>
-                <div class="proposal-card fade-in">
-                    <span class="proposal-icon">🏃‍♀️</span>
-                    <h3 class="proposal-title">Deportes Inclusivos</h3>
-                    <p class="proposal-description">Crear equipos deportivos para todos los niveles, organizar torneos internos y garantizar que cada estudiante pueda participar en la actividad física que más le guste.</p>
-                </div>
-                <div class="proposal-card fade-in">
-                    <span class="proposal-icon">🗣️</span>
-                    <h3 class="proposal-title">Tu Voz Cuenta</h3>
-                    <p class="proposal-description">Establecer un sistema digital de sugerencias y crear asambleas estudiantiles mensuales donde todos puedan expresar sus ideas y propuestas.</p>
-                </div>
-                <div class="proposal-card fade-in">
-                    <span class="proposal-icon">🎉</span>
-                    <h3 class="proposal-title">Eventos Memorables</h3>
-                    <p class="proposal-description">Organizar actividades especiales como festivales gastronómicos, obras de teatro estudiantiles y competencias académicas que hagan nuestra experiencia escolar única.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section id="vote" class="section vote-section">
-        <div class="container">
-            <div class="vote-content fade-in">
-                <h2>¡Es hora de votar!</h2>
-                <p>Tu voto es tu voz. Juntos podemos transformar nuestro colegio en un lugar más divertido, inclusivo y lleno de oportunidades para crecer y aprender.</p>
-                <button class="vote-button" onclick="showVoteConfirmation()">
-                    🗳️ Votar por {{candidato.usuario.nombres_usuario}}
-                </button>
-            </div>
-        </div>
-    </section>
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p> {{candidato.usuario.nombres_usuario}} - Candidat@ a {{candidato.vacante.nombre_postulacion}}l</p>
-            <p>&copy; 2025 SENA - Sistema Electoral. Todos los derechos reservados.</p>
-        </div>
-    </footer>
+
     <script>
-        function toggleMenu() {
-            const navMenu = document.getElementById('navMenu');
-            navMenu.classList.toggle('active');
+        // Mobile 
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('active');
         }
 
-        
-        document.querySelectorAll('.nav-menu a').forEach(link => {
-            link.addEventListener('click', () => {
-                document.getElementById('navMenu').classList.remove('active');
-            });
-        });
-
-        
+        // efecto
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -170,11 +288,11 @@
                         behavior: 'smooth',
                         block: 'start'
                     });
+                    document.getElementById('mobileMenu').classList.remove('active');
                 }
             });
         });
 
-        
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -191,18 +309,93 @@
         document.querySelectorAll('.fade-in').forEach(el => {
             observer.observe(el);
         });
+        function openProposalModal(proposalId) {
+            const modal = document.getElementById('proposalModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalContent = document.getElementById('modalContent');
+            // videos de  propuestas (reporducion automatica sin audio)
+            {% for propuesta in propuestas %}
+            if (proposalId == '{{ propuesta.id }}') {
+                modalTitle.textContent = '{{ propuesta.titulo }}';
+                modalContent.innerHTML = `
+                    {% if propuesta.video_url %}
+                    <div class="video-container mb-6">
+                        {% if 'youtube.com' in propuesta.video_url or 'youtu.be' in propuesta.video_url %}
+                            <iframe src="{{ propuesta.video_url }}" frameborder="0" allowfullscreen></iframe>
+                        {% else %}
+                            <video controls class="w-full">
+                                <source src="{{ propuesta.video_url }}" type="video/mp4">
+                                Tu navegador no soporta el elemento video.
+                            </video>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    <div class="prose max-w-none">
+                        <p class="text-lg text-gray-700">{{ propuesta.descripcion }}</p>
+                        {% if propuesta.descripcion_completa %}
+                        <div class="mt-6 pt-6 border-t">
+                            <h4 class="text-xl font-semibold mb-4">Detalles de la propuesta:</h4>
+                            <div class="text-gray-700">{{ propuesta.descripcion_completa|linebreaks }}</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                `;
+            }
+            {% endfor %}
+            
+            modal.classList.add('active');
+        }
 
-    
+        function closeProposalModal() {
+            document.getElementById('proposalModal').classList.remove('active');
+        }
 
         
+        function showVoteConfirmation() {
+            Swal.fire({
+                title: '¿Confirmar voto?',
+                text: '¿Estás seguro de que deseas votar por {{candidato.usuario.nombres_usuario}}?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#667eea',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Sí, votar',
+                cancelButtonText: 'Cancelar',
+                customClass: {
+                    popup: 'rounded-xl'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: '¡Voto registrado!',
+                        text: 'Tu voto ha sido registrado exitosamente.',
+                        icon: 'success',
+                        confirmButtonColor: '#667eea',
+                        customClass: {
+                            popup: 'rounded-xl'
+                        }
+                    });
+                }
+            });
+        }
+
+       
+        document.getElementById('proposalModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeProposalModal();
+            }
+        });
+
+        //efecto del header
         window.addEventListener('scroll', () => {
-            const navbar = document.querySelector('.navbar');
+            const header = document.querySelector('header');
             if (window.scrollY > 50) {
-                navbar.style.background = 'rgba(76, 175, 80, 0.95)';
+                header.classList.add('backdrop-blur-md', 'bg-white/90');
             } else {
-                navbar.style.background = 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)';
+                header.classList.remove('backdrop-blur-md', 'bg-white/90');
             }
         });
     </script>
 </body>
+
 </html>

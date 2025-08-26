@@ -6,130 +6,275 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Candidato</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="shortcut icon" href="{% static 'img/cgti.png' %}" type="image/x-icon">
     <link rel="stylesheet" href="{% static 'css/form_candidatos.css' %}">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token }}">
 </head>
-<body class="min-h-screen gradient-bg relative overflow-hidden">
-    <div class="absolute top-20 left-10 w-32 h-32 bg-green-700 opacity-10 rounded-full floating"></div>
-    <div class="absolute top-60 right-16 w-24 h-24 bg-green-700 opacity-5 rounded-full floating" style="animation-delay: -2s;"></div>
-    <div class="absolute bottom-40 left-20 w-40 h-40 bg-green-700 opacity-5 rounded-full floating" style="animation-delay: -4s;"></div>
-    <header class="glass-effect relative z-10">
-        <div class="container mx-auto px-4 py-4">
+
+<body class="gradient-bg relative overflow-hidden">
+    <div class="absolute top-20 left-10 w-32 h-32 bg-white opacity-5 rounded-full floating"></div>
+    <div class="absolute top-60 right-16 w-24 h-24 bg-white opacity-10 rounded-full floating" style="animation-delay: -2s;"></div>
+    <div class="absolute bottom-40 left-20 w-40 h-40 bg-white opacity-5 rounded-full floating" style="animation-delay: -4s;"></div>
+    <div class="absolute top-1/2 right-1/3 w-16 h-16 bg-white opacity-5 rounded-full floating" style="animation-delay: -3s;"></div>
+    <header class="glass-effect sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-6">
             <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
-                        <i class="fas fa-vote-yea text-purple-600 text-lg"></i>
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 icon-gradient rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-vote-yea text-white text-xl"></i>
                     </div>
-                    <h1 class=" text-xl font-bold">Actualización de datos</h1>
+                    <div>
+                        <h1 class="text-white text-2xl font-bold">Dashboard Candidato</h1>
+                        <p class="text-white text-opacity-70 text-sm">Gestiona tu campaña electoral</p>
+                    </div>
                 </div>
-                <button onclick="goBack()" class="glass-effect  px-4 py-2 rounded-lg hover:bg-white hover:bg-opacity-20 transition-all duration-300 flex items-center space-x-2">
-                    <i class="fas fa-arrow-left"></i>
-                    <span>Regresar</span>
+                
+                <button onclick="goBack()" 
+                        class="glass-effect text-white px-6 py-3 rounded-xl hover:bg-white hover:bg-opacity-20 transition-all duration-300 flex items-center space-x-2 group">
+                    <i class="fas fa-arrow-left group-hover:-translate-x-1 transition-transform duration-300"></i>
+                    <span class="hidden sm:inline">Regresar</span>
                 </button>
             </div>
         </div>
     </header>
-    <main class="flex-grow flex items-center justify-center p-4 relative z-10">
-        <div class="w-full max-w-4xl">
-            <div class="text-center mb-12">
-                <p class=" text-opacity-80 text-lg">Gestiona tu campaña desde un solo lugar</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-                <div class="glass-effect rounded-2xl p-8 card-hover cursor-pointer group bg-green-100" onclick="RegistroInformacion()">
-                    <div class="text-center">
-                        <div class="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                            <i class="fas fa-user  text-2xl"></i>
-                        </div>
-                        <h3 class=" font-semibold text-xl mb-2">Mi Perfil</h3>
-                        <p class=" text-opacity-70 text-sm">Actualiza tu foto, postulación y cualidades</p>
-                        <div class="mt-6 flex items-center justify-center text-blue-300">
-                            <span class="text-sm">Ver perfil</span>
-                            <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform duration-300"></i>
-                        </div>
-                    </div>
-                </div>
-                <script type="text/template" id="form-foto" >
-                        <form id="form_foto" method="POST"enctype="multipart/form-data" >
-                            {% csrf_token %}
-                            <input type="hidden" name="form_type" value="form_foto">
-                            {{ form_foto.as_p }}
-                        </form>
-                </script>
-                <div class="glass-effect rounded-2xl p-8 card-hover cursor-pointer group bg-green-100" onclick="navigateTo('proposals')">
-                    <div class="text-center" onclick="RegistroPropuesta()">
-                        <div class="w-16 h-16 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                            <i class="fas fa-lightbulb  text-2xl"></i>
-                        </div>
-                        <h3 class=" font-semibold text-xl mb-2">Mis Propuestas</h3>
-                        <p class=" text-opacity-70 text-sm">Gestiona y actualiza tus propuestas de campaña</p>
-                        <div class="mt-6 flex items-center justify-center text-green-300">
-                            <span class="text-sm">Administrar</span>
-                            <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform duration-300"></i>
-                        </div>
-                    </div>
-                </div>
-                <script type="text/template" id="form_propuesta">
-                        <form id="form_propuesta" method="POST" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            <input type="hidden" name="form_type" value="form_propuesta">
-                            {{ form_propuesta.as_p }}
-                        </form>
-                </script>
+    <main class="container mx-auto px-4 py-12 relative z-10">
 
-                <!-- Resultados -->
-                <div class="glass-effect rounded-2xl p-8 card-hover cursor-pointer group bg-green-100" onclick="navigateTo('results')">
-                    <div class="text-center">
-                        <div class="w-16 h-16 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                            <i class="fas fa-chart-bar  text-2xl"></i>
-                        </div>
-                        <h3 class=" font-semibold text-xl mb-2">Resultados</h3>
-                        <p class=" text-opacity-70 text-sm">Consulta estadísticas y métricas de campaña</p>
-                        <div class="mt-6 flex items-center justify-center text-amber-300">
-                            <span class="text-sm">Ver métricas</span>
-                            <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform duration-300"></i>
-                        </div>
+        <div class="hero-section text-center mb-16 fade-in">
+            <h2 class="text-white text-4xl md:text-5xl font-bold mb-4">
+                Bienvenido a tu Panel de Control
+            </h2>
+            <p class="text-white text-opacity-80 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+                Gestiona tu perfil, propuestas y monitorea el progreso de tu campaña desde un solo lugar
+            </p>
+        </div>
+
+        
+        <div class="dashboard-grid grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
+           
+            <div class="glass-effect rounded-2xl p-8 card-hover cursor-pointer group fade-in" onclick="RegistroInformacion()">
+                <div class="text-center">
+                    <div class="w-20 h-20 feature-icon rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                        <i class="fas fa-user text-white text-3xl"></i>
+                    </div>
+                    <h3 class="text-white font-bold text-2xl mb-3">Mi Perfil</h3>
+                    <p class="text-white text-opacity-70 text-sm leading-relaxed mb-6">
+                        Actualiza tu información personal, foto de perfil, postulación y cualidades que te destacan
+                    </p>
+                    <div class="flex items-center justify-center text-white group-hover:text-blue-200 transition-colors duration-300">
+                        <span class="text-sm font-medium">Gestionar perfil</span>
+                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform duration-300"></i>
                     </div>
                 </div>
             </div>
 
+            
+            <div class="glass-effect rounded-2xl p-8 card-hover cursor-pointer group fade-in" onclick="RegistroPropuesta()" style="animation-delay: 0.1s">
+                <div class="text-center">
+                    <div class="w-20 h-20 feature-icon green rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                        <i class="fas fa-lightbulb text-white text-3xl"></i>
+                    </div>
+                    <h3 class="text-white font-bold text-2xl mb-3">Mis Propuestas</h3>
+                    <p class="text-white text-opacity-70 text-sm leading-relaxed mb-6">
+                        Crea, edita y administra tus propuestas de campaña. Incluye videos explicativos y detalles
+                    </p>
+                    <div class="flex items-center justify-center text-white group-hover:text-green-200 transition-colors duration-300">
+                        <span class="text-sm font-medium">Administrar propuestas</span>
+                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform duration-300"></i>
+                    </div>
+                </div>
+            </div>
 
+           
+            <div class="glass-effect rounded-2xl p-8 card-hover cursor-pointer group fade-in" onclick="navigateTo('results')" style="animation-delay: 0.2s">
+                <div class="text-center">
+                    <div class="w-20 h-20 feature-icon orange rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                        <i class="fas fa-chart-line text-white text-3xl"></i>
+                    </div>
+                    <h3 class="text-white font-bold text-2xl mb-3">Resultados</h3>
+                    <p class="text-white text-opacity-70 text-sm leading-relaxed mb-6">
+                        Consulta estadísticas en tiempo real, métricas de campaña y análisis de desempeño
+                    </p>
+                    <div class="flex items-center justify-center text-white group-hover:text-orange-200 transition-colors duration-300">
+                        <span class="text-sm font-medium">Ver estadísticas</span>
+                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform duration-300"></i>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="glass-effect rounded-2xl p-8 card-hover cursor-pointer group fade-in" onclick="navigateTo('settings')" style="animation-delay: 0.3s">
+                <div class="text-center">
+                    <div class="w-20 h-20 feature-icon purple rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                        <i class="fas fa-cog text-white text-3xl"></i>
+                    </div>
+                    <h3 class="text-white font-bold text-2xl mb-3">Configuración</h3>
+                    <p class="text-white text-opacity-70 text-sm leading-relaxed mb-6">
+                        Ajusta las configuraciones de tu cuenta, privacidad y preferencias de notificaciones
+                    </p>
+                    <div class="flex items-center justify-center text-white group-hover:text-purple-200 transition-colors duration-300">
+                        <span class="text-sm font-medium">Configurar cuenta</span>
+                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform duration-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+      
+        <div class="mt-16 fade-in" style="animation-delay: 0.4s">
+            <h3 class="text-white text-2xl font-bold text-center mb-8">Acciones Rápidas</h3>
+            <div class="flex flex-wrap justify-center gap-4">
+                <button onclick="quickAction('profile')" 
+                        class="glass-effect text-white px-6 py-3 rounded-xl hover:bg-white hover:bg-opacity-20 transition-all duration-300 flex items-center space-x-2">
+                    <i class="fas fa-camera"></i>
+                    <span>Cambiar Foto</span>
+                </button>
+                <button onclick="quickAction('proposal')" 
+                        class="glass-effect text-white px-6 py-3 rounded-xl hover:bg-white hover:bg-opacity-20 transition-all duration-300 flex items-center space-x-2">
+                    <i class="fas fa-plus"></i>
+                    <span>Nueva Propuesta</span>
+                </button>
+                <button onclick="quickAction('preview')" 
+                        class="glass-effect text-white px-6 py-3 rounded-xl hover:bg-white hover:bg-opacity-20 transition-all duration-300 flex items-center space-x-2">
+                    <i class="fas fa-eye"></i>
+                    <span>Vista Previa</span>
+                </button>
+            </div>
         </div>
     </main>
 
-    <!-- Footer mejorado -->
+    
+    <script type="text/template" id="form-foto">
+        <form id="form_foto" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="form_type" value="form_foto">
+            {{ form_foto.as_p }}
+        </form>
+    </script>
+
+    <script type="text/template" id="form_propuesta">
+        <form id="form_propuesta" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="form_type" value="form_propuesta">
+            {{ form_propuesta.as_p }}
+        </form>
+    </script>
+
+    
     {% include 'components/footer.html' %}
+    
     <script src="{% static 'js/form_candidatos.js' %}"></script>
 
     <script>
         
         function goBack() {
-            // Implementar función de regreso
             console.log('Regresando...');
             window.history.back();
         }
 
-        // Efecto de partículas sutil
+        function navigateTo(section) {
+            console.log('Navegando a:', section);
+           
+            switch(section) {
+                case 'results':
+                   
+                    break;
+                case 'settings':
+                    
+                    break;
+            }
+        }
+
+        function quickAction(action) {
+            switch(action) {
+                case 'profile':
+                    RegistroInformacion();
+                    break;
+                case 'proposal':
+                    RegistroPropuesta();
+                    break;
+                case 'preview':
+                    
+                    window.open('/candidato/preview/', '_blank');
+                    break;
+            }
+        }
+
+        
         function createParticle() {
             const particle = document.createElement('div');
-            particle.className = 'absolute w-1 h-1 bg-white opacity-30 rounded-full';
+            particle.className = 'particle';
             particle.style.left = Math.random() * 100 + '%';
-            particle.style.top = Math.random() * 100 + '%';
-            particle.style.animation = 'floating 8s linear infinite';
+            particle.style.width = particle.style.height = Math.random() * 4 + 2 + 'px';
             document.body.appendChild(particle);
             
             setTimeout(() => {
-                particle.remove();
+                if (particle.parentNode) {
+                    particle.remove();
+                }
             }, 8000);
         }
 
-        // Crear partículas ocasionalmente
-        setInterval(createParticle, 3000);
+       
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        
+        setInterval(createParticle, 2000);
+
+       
+        document.querySelectorAll('.card-hover').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+       
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.background = 'rgba(102, 126, 234, 0.9)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.1)';
+            }
+        });
     </script>
 </body>
 </html>

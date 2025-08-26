@@ -1,23 +1,21 @@
+from django.db.models import Q
 from django.shortcuts import render, redirect
-from .forms import FechaVotacionForm, UsuarioForm, NuevoCandidatoForm
-from votos.models import FechaVotacion, Usuario, Voto, Password ,TipoDocumento, Estado, Ficha, Roles, Candidato, Propuesta
 from django.utils import timezone
 from django.http import JsonResponse
-import string ,hashlib, random, openpyxl, pandas as pd
-from datetime import date, timedelta
-from django.core.mail import send_mail ,EmailMultiAlternatives
+from django.core.mail import send_mail ,EmailMultiAlternatives ,send_mass_mail
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
-from votos.utils import generar_password
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.db.models import Q
-from django.core.mail import send_mass_mail
-from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
-import json
+#importaciones  python
+import string ,hashlib, random, openpyxl, json, pandas as pd
+from datetime import date, timedelta,datetime
+#importaciones propias
+from .forms import FechaVotacionForm, UsuarioForm, NuevoCandidatoForm
+from votos.models import FechaVotacion, Usuario, Voto, Password ,TipoDocumento, Estado, Ficha, Roles, Candidato, Propuesta
+from votos.utils import generar_password
 from votos.views import login
-from datetime import datetime, timedelta
+
 
 # Create your views here.
 

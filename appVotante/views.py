@@ -3,6 +3,7 @@ from votos.views import login
 from votos.models import Usuario, Candidato, Propuesta
 from django.core.paginator import Paginator
 from django.db.models import Q
+
 # Create your views here.
 def votante_view(request):
     if not request.session.get('is_authenticated'):

@@ -3,7 +3,7 @@ from django.contrib import messages
 from .forms import LoginForm
 from .utils import validar_contrasena
 from .models import Usuario, Password, FechaVotacion, Candidato, Propuesta
-import hashlib
+import hashlib, random
 from datetime import datetime
 from django.utils import timezone
 from votos.models import Usuario, Candidato, Propuesta
@@ -85,36 +85,30 @@ def login(request):
     return render(request, 'login.html', {'form': form})
 
 
-def candidatos(request):  
-    query = request.GET.get('q', '')
 
-    candidatos = Candidato.objects.select_related('usuario').prefetch_related('propuesta_set')
-    if query:
-        candidatos = candidatos.filter(
-            Q(usuario__nombres_usuario__icontains=query) |
-            Q(usuario__apellidos_usuario__icontains=query)
-        )
-    paginator = Paginator(candidatos, 5) 
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
 
-    context = {
-        'page_obj': page_obj,
-        'query': query,
-    }
-    return render(request, 'candidatos.html', context)
 
+emojis = ['📚', '🎨', '🌱', '🏃‍♀️', '💡', '🧠', '🎤', '🛠️', '🧪', '📢']
 def detalles_candidato(request, idCandidato):
     candidato = Candidato.objects.filter(idCandidato=idCandidato).select_related('usuario').first()
     if not candidato:
         messages.error(request, 'Candidato no encontrado')
-        return redirect(candidatos)
+        return redirect('index')
     
-    propuestas =3
+    
+    propuestas = Propuesta.objects.filter(candidato=candidato)
+
+    for propuesta in propuestas:
+     propuesta.emoji = random.choice(emojis)
+
+    cualidades = candidato.cualidades.order_by('-idCualidad')[:4]
+    for cualidad in cualidades:
+        cualidad.emoji = random.choice(emojis)
 
     context = {
         'candidato': candidato,
-        'propuestas': propuestas
+        'propuestas': propuestas,
+        'cualidades': cualidades
     }
     return render(request, 'detalle_candidato.html', context)
 
